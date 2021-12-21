@@ -20,6 +20,8 @@
 
 import subprocess
 
+sound_card_number = 0
+
 def play_command( url, duration = None, output = True ) :
 
     command = 'mplayer'
@@ -39,7 +41,7 @@ def kill_command() :
     return 'killall mplayer'
 
 def volume_control( value ) :
-    return 'amixer -D pulse set Master ' + value
+    return 'amixer -c ' + str(sound_card_number) + ' -D pulse set Master ' + value
 
 def play_radio( url ) :
     subprocess.Popen( play_command( url, output = False ).split() )

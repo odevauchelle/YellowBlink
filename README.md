@@ -21,6 +21,18 @@ apt-get install mplayer python3-crontab python3-pip
 ```
 pip install bottle
 ```
+## Default sound card
+
+Edit `/usr/share/alsa/alsa.conf` and change `0` to `1` in the following lines:
+```
+defaults.ctl.card 0
+defaults.pcm.card 0
+```
+
+Edit `RadioPlayer.py` and change `0` to `1` in the following lines:
+```
+sound_card_number = 0
+```
 
 ## Locale
 
@@ -46,6 +58,7 @@ Here is how to get a Realtek dongle to work on the Raspberry, as explained [here
 sudo wget http://downloads.fars-robotics.net/wifi-drivers/install-wifi -O /usr/bin/install-wifi
 sudo chmod +x /usr/bin/install-wifi
 ```
+(Does not work any more with new kernel 5.10.63+.)
 
 ## To do
 
