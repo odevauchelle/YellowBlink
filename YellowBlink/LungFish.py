@@ -36,7 +36,7 @@ from rendering import *
 def home():
     cron = (CronTab( user = True ))
     alarms = get_alarms_from_cron( cron )
-    return homepage_template( alarms, webradios )
+    return homepage_template( alarms, webradios, get_current_volume() )
 
 @route('/delete/<index>')
 def delete( index ) :
@@ -58,10 +58,10 @@ def play( radio_name ) :
 def adjust_volume( value ) :
 
     if value == 'up' :
-        subprocess.Popen(  volume_control( '10%+' ).split() )
+        volume_control( '+' )
 
     elif value == 'down' :
-        subprocess.Popen(  volume_control( '10%-' ).split() )
+        volume_control( '-' )
 
     return redirect("/home")
 
@@ -88,6 +88,7 @@ def set_alarm( index ):
         minute = int( request.forms.get('minute') ),
         webradio_name = request.forms.get('webradio'),
         duration = int( request.forms.get('duration') )*60, # seconds
+        volume = int( request.forms.get('volume') )
         )
 
     alarm['days_of_week'] = []

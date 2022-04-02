@@ -80,12 +80,18 @@ def get_header( with_time = True ) :
 #
 ###################
 
-def volume_control_bar() :
+def stop_bar() :
+
+    html = '<a href="/off">Stop</a>'
+
+    return html
+
+def volume_control_bar( current_volume = None ) :
 
     html = ''
 
     html += '<a href="/volume/down">&#8681;</a>' + separator
-    html += '<a href="/off">Stop</a>' + separator
+    html += 'Volume ' + str(current_volume) + separator
     html += '<a href="/volume/up">&#8679;</a>'
 
     return html
@@ -107,7 +113,7 @@ def alarm_to_html( alarm, alarm_index ) :
         html += '<span style="' + style + '">'
         html += day
         html += '</span>'
-        html += ' '
+        html += '  '
 
     html += '<br>'
 
@@ -117,13 +123,15 @@ def alarm_to_html( alarm, alarm_index ) :
     html += separator
     html += str( alarm['duration']//60 ) + ' min'
     html += separator
+    html += 'Vol. ' + str( alarm['volume'] )
+    html += separator
     html += '<a href="/edit/' + str(alarm_index) + '">Edit</a>'
     html += separator
     html += '<a href="/delete/' + str(alarm_index) + '">Delete</a>'
 
     return html
 
-def homepage_template( alarms, webradios ) :
+def homepage_template( alarms, webradios, current_volume = None ) :
 
     html = get_header()
 
@@ -138,9 +146,16 @@ def homepage_template( alarms, webradios ) :
 
     html += '</p>'
 
+    # Stop
+
+    html += '<p align="center">'
+    html += stop_bar()
+    html += '</p>'
+
+
     # Volume
     html += '<p align="left">'
-    html += volume_control_bar()
+    html += volume_control_bar( current_volume )
     html += '</p>'
 
     # Alarms
@@ -151,7 +166,7 @@ def homepage_template( alarms, webradios ) :
 
     return html
 
-def edit_alarm_template( alarm = None, name = 'new' ) :
+def edit_alarm_template( alarm = None, name = 'new', current_volume = 0 ) :
 
     html = get_header()
 
@@ -187,10 +202,13 @@ def edit_alarm_template( alarm = None, name = 'new' ) :
 
     # duration
     html += '<p>Duration '
-    html += '<input name="duration" type="number" min=0 max=120 value=' + str(int(alarm['duration']/60) ) + ' /> min</p>'
+    html += '<input name="duration" type="number" min=0 max=120 value=' + str( int(alarm['duration']/60) ) + ' /> min</p>'
+
+    # volume
+    html += '<p>Volume '
+    html += '<input name="volume" type="number" min=0 max=100 value=' + str( int( current_volume) ) + ' /></p>'
 
     # submit form
-
     html += '<p><input value="Set alarm" type="submit" />'
     html += separator
     html +='<a href="/home">Cancel</a></p>'

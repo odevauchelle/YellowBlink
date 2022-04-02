@@ -38,7 +38,7 @@ def create_alarm_job( alarm, cron ) :
 
     if len( alarm['days_of_week'] ) != 0 :
 
-        job = cron.new( comment = 'YellowBlink', command = play_command( url, alarm['duration'] ) )
+        job = cron.new( comment = 'YellowBlink', command = play_command( url, alarm['duration'], alarm['volume'] ) )
 
         job.dow.on(*alarm['days_of_week'])
         job.hour.on(alarm['hour'])
@@ -55,9 +55,11 @@ def get_alarm_jobs_from_cron( cron ) :
 def get_alarm_from_job( job ) :
 
     command = job.command.split()
+    command = command[ command.index('play') + 1: ]
 
-    url = command[-1]
-    duration = int( command[ command.index('-endpos') + 1 ] )
+    url = command[0]
+    duration = int( command[1] )
+    volume = int( command[2] )
 
     for name, features in webradios.items() :
         if features['url'] == url :
@@ -68,7 +70,8 @@ def get_alarm_from_job( job ) :
         hour = int( str( job.hour ) ),
         minute = int( str( job.minute ) ),
         duration = duration, # seconds
-        webradio_name = name
+        webradio_name = name,
+        volume = volume
         )
 
     return alarm
@@ -94,23 +97,23 @@ def get_alarms_from_cron( cron ) :
 
 if __name__ == '__main__' :
 
-    alarm = dict(
-        days_of_week = [1],
-        hour = 11,
-        minute = 49,
-        duration = 10, # seconds
-        webradio_name = 'bbc4'
-        )
+    # alarm = dict(
+    #     days_of_week = [1],
+    #     hour = 11,
+    #     minute = 49,
+    #     duration = 10, # seconds
+    #     webradio_name = 'bbc4'
+    #     )
 
     # print( alarm_to_html(alarm) )
     #
 
     from crontab import CronTab
-
+    #
     cron = CronTab( user = True )
-    # cron.remove_all( comment = 'YellowBlink')
+    cron.remove_all( comment = 'YellowBlink')
 
-    job = create_alarm_job( alarm, cron )
+    # job = create_alarm_job( alarm, cron )
 
     # #
     # add_alarm_to_cron( alarm, cron )
@@ -119,7 +122,7 @@ if __name__ == '__main__' :
     #
     #
 
-    cron.write()
+    # cron.write()
     #
     #
     print(get_alarms_from_cron(cron))

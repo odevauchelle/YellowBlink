@@ -17,15 +17,37 @@
 #
 # Olivier Devauchelle, 2021
 
+import sys
 import subprocess
 import alsaaudio
+#importing the os module
+import os
 
 def get_mixer( sound_card_number = 0 ) :
     return alsaaudio.Mixer( control='Speaker', cardindex = sound_card_number )
 
 mixer = get_mixer()
 
-def play_command( url, duration = None, output = True ) :
+def play_command( url, duration = None, volume = None ) :
+
+    '''
+    To be used in crontab.
+    '''
+
+    command = 'python3 '
+    command += os.getcwd() # current directory
+    command += '/RadioPlayer.py play ' + url
+
+    for kw in [duration, volume] :
+        if not kw is None :
+            command += ' ' + str( kw )
+
+    return command
+
+def play_radio( url, duration = None, volume = None ) :
+
+    if not volume is None :
+        volume_control( int( volume ) )
 
     command = 'mplayer'
 
@@ -34,17 +56,18 @@ def play_command( url, duration = None, output = True ) :
 
     command += ' ' + url
 
-    if not output :
-        command += ' </dev/null >/dev/null 2>&1 &'
-    # ['mplayer', webradios[name]['url'], '</dev/null', '>/dev/null', '2>&1', '&' ]
+    command += ' </dev/null >/dev/null 2>&1 &' # NO OUTPUT
 
-    return command
+    subprocess.Popen( command.split() )
+
 
 def kill_command() :
     return 'killall mplayer'
 
+
 def get_current_volume() :
     return int( mixer.getvolume()[0] )
+
 
 def volume_control( value, percent_step = 10 ) :
 
@@ -58,12 +81,15 @@ def volume_control( value, percent_step = 10 ) :
 
     return get_current_volume()
 
-def play_radio( url ) :
-    subprocess.Popen( play_command( url, output = False ).split() )
 
 def switch_off_radio() :
     subprocess.Popen( kill_command().split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE ).communicate()
 
 if __name__ == '__main__' :
-    print(get_current_volume())
-    print(volume_control('+'))
+
+    # For command line use
+
+    arguments = sys.argv[1:]
+
+    if arguments[0] == 'play' :
+        play_radio( *arguments[1:] )
