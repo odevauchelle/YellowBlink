@@ -17,10 +17,13 @@
 #
 # Olivier Devauchelle, 2021
 
-
 import subprocess
+import alsaaudio
 
-sound_card_number = 0
+def get_mixer( sound_card_number = 0 ) :
+    return alsaaudio.Mixer( control='Speaker', cardindex = sound_card_number )
+
+mixer = get_mixer()
 
 def play_command( url, duration = None, output = True ) :
 
@@ -40,11 +43,27 @@ def play_command( url, duration = None, output = True ) :
 def kill_command() :
     return 'killall mplayer'
 
-def volume_control( value ) :
-    return 'amixer -c ' + str(sound_card_number) + ' -D pulse set Master ' + value
+def get_current_volume() :
+    return int( mixer.getvolume()[0] )
+
+def volume_control( value, percent_step = 10 ) :
+
+    if value == '+' :
+        value = min( [ get_current_volume() + percent_step, 100 ] )
+
+    elif value == '-' :
+        value = max( [ get_current_volume() - percent_step, 0 ] )
+
+    mixer.setvolume( value )
+
+    return get_current_volume()
 
 def play_radio( url ) :
     subprocess.Popen( play_command( url, output = False ).split() )
 
 def switch_off_radio() :
     subprocess.Popen( kill_command().split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE ).communicate()
+
+if __name__ == '__main__' :
+    print(get_current_volume())
+    print(volume_control('+'))

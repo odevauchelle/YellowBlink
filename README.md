@@ -16,7 +16,7 @@ Tested on Debian and Raspberry Pi OS (Bullseye).
 
 
 ```
-apt-get install mplayer python3-crontab python3-pip
+apt-get install mplayer python3-alsaaudio python3-crontab python3-pip
 ```
 ```
 pip install bottle
