@@ -41,7 +41,8 @@ default_alarm = dict(
         webradio_name = 'fip'
         )
 
-weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+i_days = [ 1, 2, 3, 4, 5, 6, 0 ]
+weekdays = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ]
 
 ##############################
 #
@@ -100,9 +101,9 @@ def alarm_to_html( alarm, alarm_index ) :
 
     html = ''
 
-    for i, day in enumerate( weekdays ) :
+    for i in i_days :
 
-        i += 1
+        day = weekdays[i]
 
         if i in alarm['days_of_week'] :
             style = "background-color: LightGrey"
@@ -182,8 +183,9 @@ def edit_alarm_template( alarm = None, name = 'new', current_volume = 0 ) :
 
     # days
     html += '<p text-align = "left">'
-    for i, day in enumerate(weekdays) :
-        i += 1
+    for i in i_days :
+
+        day = weekdays[i]
         html += '<div>'
         html += '<input type="checkbox" '
         if i in alarm['days_of_week'] :

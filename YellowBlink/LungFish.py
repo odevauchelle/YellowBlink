@@ -93,8 +93,8 @@ def set_alarm( index ):
 
     alarm['days_of_week'] = []
 
-    for i in range( 7 ) :
-        i += 1
+    for i in i_days :
+
         if not request.forms.get('day_' + str(i)) is None :
             alarm['days_of_week'] += [ i ]
 

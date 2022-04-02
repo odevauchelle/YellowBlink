@@ -39,7 +39,7 @@ def create_alarm_job( alarm, cron ) :
     if len( alarm['days_of_week'] ) != 0 :
 
         job = cron.new( comment = 'YellowBlink', command = play_command( url, alarm['duration'], alarm['volume'] ) )
-
+        print('>>>>', alarm['days_of_week'])
         job.dow.on(*alarm['days_of_week'])
         job.hour.on(alarm['hour'])
         job.minute.on(alarm['minute'])
