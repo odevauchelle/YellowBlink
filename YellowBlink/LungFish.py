@@ -26,12 +26,12 @@ from RadioPlayer import *
 from alarm import *
 from rendering import *
 
-try :
-    import button
-    button.run_as_background()
-    print('button.py running.')
-except :
-    print('button.py not running.')
+# try :
+#     import button
+#     button.run_as_background()
+#     print('button.py running.')
+# except :
+#     print('button.py not running.')
 
 #########################
 #
