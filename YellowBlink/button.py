@@ -68,7 +68,8 @@ def main():
             subprocess.call(['sudo shutdown -h now'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def run_as_background() :
-    subprocess.Popen( [ 'python3', 'button.py'] )
+    # subprocess.Popen( [ 'python3', 'button.py'] )
+    subprocess.Popen( [ 'python3', 'button.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE ).communicate()
 
 if __name__ == '__main__' :
     main()
