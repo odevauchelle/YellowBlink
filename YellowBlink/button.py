@@ -41,7 +41,7 @@
 import RPi.GPIO as GPIO
 import subprocess
 import time
-import RadioPlayer
+from RadioPlayer import kill_command
 
 GPIO.setmode( GPIO.BCM ) # use GPIO numbering
 GPIO.setwarnings( False )
@@ -68,4 +68,4 @@ def main():
             subprocess.call(['sudo shutdown -h now'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def run_as_background() :
-    subprocess.Popen( ['python3','button.py'] )
+    subprocess.Popen( [ 'python3', 'button.py'] )
