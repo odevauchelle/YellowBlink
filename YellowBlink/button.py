@@ -41,7 +41,7 @@
 import RPi.GPIO as GPIO
 import subprocess
 import time
-from RadioPlayer import kill_command
+from RadioPlayer import switch_off_radio
 
 GPIO.setmode( GPIO.BCM ) # use GPIO numbering
 GPIO.setwarnings( False )
@@ -59,7 +59,7 @@ def main():
 
         # subprocess.call(['python3 ampli.py off && killall mplayer'], shell=True, stdout=subprocess.PIPE)
         print('Stopping radio streaming.')
-        kill_command()
+        switch_off_radio()
 
         time.sleep(1.5)   # Wait 1 second to check for spurious input
 
