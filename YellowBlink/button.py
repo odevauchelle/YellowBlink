@@ -69,3 +69,6 @@ def main():
 
 def run_as_background() :
     subprocess.Popen( [ 'python3', 'button.py'] )
+
+if __name__ == '__main__' :
+    main()
