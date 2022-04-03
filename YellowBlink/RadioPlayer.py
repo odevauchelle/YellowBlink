@@ -35,11 +35,18 @@ def get_mixer( sound_card_number = 0 ) :
 for sound_card_number in range(5) :
     try :
         mixer = get_mixer()
-        print( 'Soundcard: ', sound_card_number )
         break
-        
+
     except :
         pass
+
+try :
+    mixer
+    print( 'Soundcard: ', sound_card_number )
+
+except :
+    print('No soundcard found!')
+
 
 
 def play_command( url, duration = None, volume = None ) :
