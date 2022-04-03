@@ -28,13 +28,13 @@ def get_mixer( sound_card_number = 0 ) :
 
 #########################
 #
-# Settings
+# Mixer Settings
 #
 #########################
 
 for sound_card_number in range(5) :
     try :
-        mixer = get_mixer()
+        mixer = get_mixer( sound_card_number )
         break
 
     except :
@@ -47,7 +47,11 @@ try :
 except :
     print('No soundcard found!')
 
-
+#########################
+#
+# Commands
+#
+#########################
 
 def play_command( url, duration = None, volume = None ) :
 
