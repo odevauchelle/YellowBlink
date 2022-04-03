@@ -100,6 +100,7 @@ def volume_control_bar( current_volume = None ) :
 def alarm_to_html( alarm, alarm_index ) :
 
     html = ''
+    day_space = '&emsp;'
 
     for i in i_days :
 
@@ -114,7 +115,9 @@ def alarm_to_html( alarm, alarm_index ) :
         html += '<span style="' + style + '">'
         html += day
         html += '</span>'
-        html += '  '
+        html += day_space
+
+    html = html[:-len(day_space)] # remove last space
 
     html += '<br>'
 
@@ -128,7 +131,7 @@ def alarm_to_html( alarm, alarm_index ) :
     html += separator
     html += '<a href="/edit/' + str(alarm_index) + '">Edit</a>'
     html += separator
-    html += '<a href="/delete/' + str(alarm_index) + '">Delete</a>'
+    html += '<a href="/delete/' + str(alarm_index) + '">Del.</a>'
 
     return html
 
@@ -173,6 +176,7 @@ def edit_alarm_template( alarm = None, name = 'new', current_volume = 0 ) :
 
     if alarm is None :
         alarm = default_alarm.copy()
+        alarm['volume'] = current_volume
 
     html += '<form action="/edit/' + name +  '" method="post">'
 
@@ -197,9 +201,15 @@ def edit_alarm_template( alarm = None, name = 'new', current_volume = 0 ) :
 
     # webradio
     html += '<p>Webradio '
-    html += '<select name = "webradio">\n'
+    html += '<select name = "webradio" >\n'
     for name, webradio in webradios.items() :
-        html += '<option value="' + name + '">' + webradio['full_name'] + '</option>\n'
+
+        if name == alarm['webradio_name'] :
+            is_selected = ' selected '
+        else :
+            is_selected = ''
+
+        html += '<option value="' + name + '"' + is_selected + '>' + webradio['full_name'] + '</option>\n'
     html += '</select></p>'
 
     # duration
@@ -208,7 +218,7 @@ def edit_alarm_template( alarm = None, name = 'new', current_volume = 0 ) :
 
     # volume
     html += '<p>Volume '
-    html += '<input name="volume" type="number" min=0 max=100 value=' + str( int( current_volume) ) + ' /></p>'
+    html += '<input name="volume" type="number" min=0 max=100 value=' + str( int( alarm['volume'] ) ) + ' /></p>'
 
     # submit form
     html += '<p><input value="Set alarm" type="submit" />'

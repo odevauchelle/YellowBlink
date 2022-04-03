@@ -41,9 +41,10 @@
 import RPi.GPIO as GPIO
 import subprocess
 import time
+import RadioPlayer
 
-GPIO.setmode(GPIO.BCM) # use GPIO numbering
-GPIO.setwarnings(False)
+GPIO.setmode( GPIO.BCM ) # use GPIO numbering
+GPIO.setwarnings( False )
 
 INT = 24    # GPIO button interrupt to shutdown procedure
 
@@ -56,7 +57,8 @@ def main():
         # set an interrupt on a falling edge and wait for it to happen
         GPIO.wait_for_edge(INT, GPIO.FALLING)
 
-        subprocess.call(['python3 ampli.py off && killall mplayer'], shell=True, stdout=subprocess.PIPE)
+        # subprocess.call(['python3 ampli.py off && killall mplayer'], shell=True, stdout=subprocess.PIPE)
+        kill_command()
 
         time.sleep(1.5)   # Wait 1 second to check for spurious input
 

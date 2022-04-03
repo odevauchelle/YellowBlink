@@ -26,6 +26,12 @@ from RadioPlayer import *
 from alarm import *
 from rendering import *
 
+try :
+    import button
+    print('button.py running.')
+except :
+    print('button.py not running.')
+
 #########################
 #
 # Main page
@@ -74,8 +80,10 @@ def adjust_volume( value ) :
 @get('/edit/<index>')
 def edit_alarm( index ):
     if index == 'new' :
-        return edit_alarm_template( name = index )
+        # create new alarm
+        return edit_alarm_template( name = index, current_volume = get_current_volume() )
     else :
+        # edit previous alarm
         cron = CronTab( user = True )
         alarms = get_alarms_from_cron( cron )
         return edit_alarm_template( alarm = alarms[ int(index) ], name = index )
@@ -117,5 +125,5 @@ def set_alarm( index ):
 #
 #########################
 
-run( host='localhost', port=8080, debug = True )
-# run( host='0.0.0.0', port=8080, debug = False )
+# run( host='localhost', port=8080, debug = True )
+run( host='0.0.0.0', port=8080, debug = False )

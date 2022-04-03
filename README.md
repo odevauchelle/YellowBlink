@@ -19,7 +19,7 @@ Tested on Debian and Raspberry Pi OS (Bullseye).
 apt-get install mplayer python3-alsaaudio python3-crontab python3-pip
 ```
 ```
-pip install bottle
+pip3 install bottle RPi.GPIO
 ```
 ## Default sound card
 
@@ -27,11 +27,6 @@ Edit `/usr/share/alsa/alsa.conf` and change `0` to `1` in the following lines:
 ```
 defaults.ctl.card 0
 defaults.pcm.card 0
-```
-
-Edit `RadioPlayer.py` and change `0` to `1` in the following lines:
-```
-sound_card_number = 0
 ```
 
 ## Locale
@@ -62,8 +57,6 @@ sudo chmod +x /usr/bin/install-wifi
 
 ## To do
 
-- Prepare a script for streaming
 - Use button to switch off radio
 - Switch on and off the amplifier
-- Set the volume of alarms
 - Add a recovery soundtrack in case of streaming failure

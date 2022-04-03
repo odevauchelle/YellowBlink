@@ -26,7 +26,21 @@ import os
 def get_mixer( sound_card_number = 0 ) :
     return alsaaudio.Mixer( control='Speaker', cardindex = sound_card_number )
 
-mixer = get_mixer()
+#########################
+#
+# Settings
+#
+#########################
+
+for sound_card_number in range(5) :
+    try :
+        mixer = get_mixer()
+        print( 'Soundcard: ', sound_card_number )
+        break
+        
+    except :
+        pass
+
 
 def play_command( url, duration = None, volume = None ) :
 
