@@ -58,12 +58,14 @@ def main():
         GPIO.wait_for_edge(INT, GPIO.FALLING)
 
         # subprocess.call(['python3 ampli.py off && killall mplayer'], shell=True, stdout=subprocess.PIPE)
+        print('Stopping radio streaming.')
         kill_command()
 
         time.sleep(1.5)   # Wait 1 second to check for spurious input
 
         if( GPIO.input(INT) == 0 ) :
+            print('Shutdown.')
             subprocess.call(['sudo shutdown -h now'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-if __name__ == '__main__':
-    main()
+def run_as_background() :
+    subprocess.Popen( ['python3','button.py'] )
