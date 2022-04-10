@@ -42,7 +42,7 @@ for comment in ['YellowBlink', 'YellowBlinkInstall'] :
 ###############
 
 for launch_prog in launch_progs :
-    command = '(cd ' + path + '; ' + 'python3 ' + launch_prog + ')'
+    command = '(sleep 30; cd ' + path + '; ' + 'python3 ' + launch_prog + ')'
     job = cron.new( comment = 'YellowBlinkInstall', command = command )
     job.every_reboot()
 cron.write()
