@@ -42,16 +42,17 @@ for comment in ['YellowBlink', 'YellowBlinkInstall'] :
 ###############
 
 for launch_prog in launch_progs :
-    command = '(sleep 30; cd ' + path + '; ' + 'python3 ' + launch_prog + ')'
+    command = 'sleep 30 && (cd ' + path + '; ' + 'python3 ' + launch_prog + ')'
     job = cron.new( comment = 'YellowBlinkInstall', command = command )
     job.every_reboot()
-cron.write()
 
 ##############
 #
-# check
+# check & apply
 #
 ###############
+
+cron.write()
 
 for job in cron.find_comment('YellowBlinkInstall') :
     print(job)
