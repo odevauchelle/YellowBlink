@@ -54,7 +54,8 @@ def get_alarm_jobs_from_cron( cron ) :
 
 def get_alarm_from_job( job ) :
 
-    command = job.command.split()
+    command = job.command.split(';')[-1]
+    command = command[:-1].split()
     command = command[ command.index('play') + 1: ]
 
     url = command[0]
@@ -97,13 +98,14 @@ def get_alarms_from_cron( cron ) :
 
 if __name__ == '__main__' :
 
-    # alarm = dict(
-    #     days_of_week = [1],
-    #     hour = 11,
-    #     minute = 49,
-    #     duration = 10, # seconds
-    #     webradio_name = 'bbc4'
-    #     )
+    alarm = dict(
+        days_of_week = [1],
+        hour = 11,
+        minute = 49,
+        duration = 10, # seconds
+        webradio_name = 'bbc4',
+        volume = 51
+        )
 
     # print( alarm_to_html(alarm) )
     #
@@ -113,7 +115,8 @@ if __name__ == '__main__' :
     cron = CronTab( user = True )
     cron.remove_all( comment = 'YellowBlink')
 
-    # job = create_alarm_job( alarm, cron )
+    job = create_alarm_job( alarm, cron )
+    # print(job)
 
     # #
     # add_alarm_to_cron( alarm, cron )
@@ -122,7 +125,7 @@ if __name__ == '__main__' :
     #
     #
 
-    # cron.write()
+    cron.write()
     #
     #
     print(get_alarms_from_cron(cron))

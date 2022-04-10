@@ -47,6 +47,10 @@ try :
 except :
     print('No soundcard found!')
 
+path = os.getcwd() # current directory
+print('Current directory:', path)
+
+
 #########################
 #
 # Commands
@@ -58,14 +62,16 @@ def play_command( url, duration = None, volume = None ) :
     '''
     To be used in crontab.
     '''
+    #(cd ./Images/; python test.py)
 
-    command = 'python3 '
-    command += os.getcwd() # current directory
-    command += '/RadioPlayer.py play ' + url
+    command = '(cd ' + path + '; '
+    command += 'python3 RadioPlayer.py play ' + url
 
     for kw in [duration, volume] :
         if not kw is None :
             command += ' ' + str( kw )
+
+    command += ')'
 
     return command
 
