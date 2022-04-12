@@ -52,14 +52,15 @@ weekdays = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ]
 
 static_header = '''
 <style>
-
 a{ color:''' + main_color + '''; text-decoration: none;}
-
 p{ text-align: center;}
-
 </style>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <title>LungFish</title>
+  <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+</head>
 '''
 
 def get_header( with_time = True ) :
