@@ -59,7 +59,7 @@ p{ text-align: center;}
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
   <title>LungFish</title>
-  <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+  <link rel="shortcut icon" href="/static/favicon.svg" type="image/x-icon" />
 </head>
 '''
 

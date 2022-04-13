@@ -18,7 +18,8 @@
 # Olivier Devauchelle, 2021
 
 
-from bottle import route, run, get, post, request, redirect
+from bottle import route, run, get, post, request, redirect, static_file
+
 from crontab import CronTab
 
 from webradios import webradios
@@ -44,6 +45,10 @@ def home():
     cron = (CronTab( user = True ))
     alarms = get_alarms_from_cron( cron )
     return homepage_template( alarms, webradios, get_current_volume() )
+
+@route('/static/<filename>')
+def server_static( filename ):
+    return static_file( filename, root = './static_files/' )
 
 @route('/delete/<index>')
 def delete( index ) :
