@@ -58,4 +58,7 @@ if __name__ == '__main__' :
     output = ampli_control( sys.argv[1] )
 
     if not output is None :
-        print(output)
+        if output :
+            print('off')
+        else :
+            print('on')
