@@ -42,7 +42,7 @@ def ampli_control( switch ) :
         print('Amp off.')
 
     elif switch == 'state' :
-        return GPIO.input( pin_number ) 
+        return GPIO.input( pin_number )
 
     else :
         print('"on", "off" or "state".')
@@ -57,5 +57,5 @@ if __name__ == '__main__' :
 
     output = ampli_control( sys.argv[1] )
 
-    is not output is None :
+    if not output is None :
         print(output)
