@@ -37,6 +37,14 @@ Before using the alarm, remember to set your time zone with `sudo raspi-config`.
 
 Go to the radio's webpage, start streaming it, and then find the streaming url in the network logging tab of your web browser, as explained [here](https://stackoverflow.com/questions/28314897/how-to-get-direct-streaming-url-from-this-flash-online-streaming-radio-station).
 
+## GPIO pins
+
+| Use | GPIO |
+|--|--|
+| Status led | 18 |
+| Amp switch | 17 |
+| Button | 24 |
+
 ## Side issues
 
 ### Status led
@@ -45,18 +53,6 @@ To show the Raspberry status on a GPIO led, as explained [here](https://forums.r
 ```
 dtoverlay=pi3-act-led,activelow=on,gpio=18
 ```
-### Wifi dongle
-
-Here is how to get a Realtek dongle to work on the Raspberry, as explained [here](https://forums.raspberrypi.com/viewtopic.php?t=285488):
-
-```
-sudo wget http://downloads.fars-robotics.net/wifi-drivers/install-wifi -O /usr/bin/install-wifi
-sudo chmod +x /usr/bin/install-wifi
-```
-(Does not work any more with new kernel 5.10.63+.)
-
 ## To do
 
-- Use button to switch off radio
-- Switch on and off the amplifier
 - Add a recovery soundtrack in case of streaming failure

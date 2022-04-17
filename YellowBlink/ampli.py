@@ -21,41 +21,41 @@ import sys
 import RPi.GPIO as GPIO
 
 GPIO.setmode( GPIO.BCM )
-GPIO.setwarnings(False)
+GPIO.setwarnings( False )
 
 ##############################
 
 pin_number = 17
 
-##############################
-
 GPIO.setup( pin_number, GPIO.OUT )
 
 ##############################
-#
-# As a python function
-#
-##############################
 
-# def ampli_control( switch ) :
-#
-#     if switch == 'on' :
-#         GPIO.output( pin_number, GPIO.LOW )
-#
-#     elif switch == 'off' :
-#         GPIO.output( pin_number, GPIO.HIGH )
-#
-# ###########
+def ampli_control( switch ) :
+
+    if switch == 'on' :
+        GPIO.output( pin_number, GPIO.LOW )
+        print('Amp on.')
+
+    elif switch == 'off' :
+        GPIO.output( pin_number, GPIO.HIGH )
+        print('Amp off.')
+
+    elif switch == 'state' :
+        return GPIO.input( pin_number ) 
+
+    else :
+        print('"on", "off" or "state".')
+
+##########################
 #
 # command line
 #
-###########
+##############################
 
-if sys.argv[1] == 'on' :
-    GPIO.output( pin_number, GPIO.LOW )
+if __name__ == '__main__' :
 
-elif sys.argv[1] == 'off' :
-    GPIO.output( pin_number, GPIO.HIGH )
+    output = ampli_control( sys.argv[1] )
 
-else :
-    print('Ampli can only be turned on or off.')
+    is not output is None :
+        print(output)

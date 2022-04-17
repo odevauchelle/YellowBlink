@@ -23,14 +23,29 @@ import alsaaudio
 #importing the os module
 import os
 
-def get_mixer( sound_card_number = 0 ) :
-    return alsaaudio.Mixer( control='Speaker', cardindex = sound_card_number )
+########################
+#
+# Amp control
+#
+#########################
+
+try :
+    from ampli import ampli_control
+    with_amp_control = True
+    ampli_control('off')
+
+except :
+    with_amp_control = False
+
 
 #########################
 #
 # Mixer Settings
 #
 #########################
+
+def get_mixer( sound_card_number = 0 ) :
+    return alsaaudio.Mixer( control='Speaker', cardindex = sound_card_number )
 
 for sound_card_number in range(5) :
     try :
@@ -77,6 +92,9 @@ def play_command( url, duration = None, volume = None ) :
 
 def play_radio( url, duration = None, volume = None ) :
 
+    if with_amp_control :
+        ampli_control('on')
+
     if not volume is None :
         volume_control( int( volume ) )
 
@@ -87,9 +105,12 @@ def play_radio( url, duration = None, volume = None ) :
 
     command += ' ' + url
 
-    command += ' </dev/null >/dev/null 2>&1 &' # NO OUTPUT
+    # command += ' </dev/null >/dev/null 2>&1 &' # NO OUTPUT
 
-    subprocess.Popen( command.split() )
+    if with_amp_control :
+        command += ' ; ampli off'
+
+    subprocess.Popen( command, shell = True )
 
 
 def kill_command() :
@@ -114,7 +135,11 @@ def volume_control( value, percent_step = 10 ) :
 
 
 def switch_off_radio() :
+
     subprocess.Popen( kill_command().split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE ).communicate()
+
+    if with_amp_control :
+        ampli_control('off')
 
 if __name__ == '__main__' :
 
