@@ -108,7 +108,7 @@ def play_radio( url, duration = None, volume = None ) :
     # command += ' </dev/null >/dev/null 2>&1 &' # NO OUTPUT
 
     if with_amp_control :
-        command += ' ; ampli off'
+        command += ' ; python3 ampli.py off'
 
     subprocess.Popen( command, shell = True )
 
