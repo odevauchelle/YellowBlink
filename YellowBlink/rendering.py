@@ -30,8 +30,12 @@ from socket import gethostname
 
 main_color = 'DarkCyan'
 faded_color = 'grey'
+light_faded_color = 'LightGrey'
 
 separator = '&nbsp; | &nbsp;'
+
+# hrule = '<hr color=' + light_faded_color + '>\n'
+hrule = '<hr style="border: 1px dashed ' + light_faded_color + ';">'
 
 default_alarm = dict(
         days_of_week = [],
@@ -54,6 +58,10 @@ static_header = '''
 <style>
 a{ color:''' + main_color + '''; text-decoration: none;}
 p{ text-align: center;}
+body {
+    width: 350pt;
+    margin: 0 auto;
+}
 </style>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -64,12 +72,14 @@ p{ text-align: center;}
 '''
 
 def get_header( with_time = True ) :
+
     html = static_header
 
     now = datetime.now()
 
     if with_time :
         html += '<p>'
+        html += '<br>'
         html += '&#64;' + gethostname() + separator
         html += now.strftime("%H:%M" + separator + "%b %d, %Y")
         html += '</p>'
@@ -108,7 +118,7 @@ def alarm_to_html( alarm, alarm_index ) :
         day = weekdays[i]
 
         if i in alarm['days_of_week'] :
-            style = "background-color: LightGrey"
+            style = "background-color: " + light_faded_color
             # style += "; color: " + main_color
         else :
             style = "color: grey"
@@ -140,6 +150,8 @@ def homepage_template( alarms, webradios, current_volume = None ) :
 
     html = get_header()
 
+    html += hrule
+
     # Radios
     html += '<p align="left">'
 
@@ -157,11 +169,15 @@ def homepage_template( alarms, webradios, current_volume = None ) :
     html += stop_bar()
     html += '</p>'
 
+    html += hrule
+
 
     # Volume
     html += '<p align="left">'
     html += volume_control_bar( current_volume )
     html += '</p>'
+
+    html += hrule
 
     # Alarms
     for i, alarm in enumerate( alarms ) :
