@@ -32,7 +32,7 @@ main_color = 'DarkCyan'
 faded_color = 'grey'
 light_faded_color = 'LightGrey'
 
-separator = '&nbsp; | &nbsp;'
+separator = '&nbsp; <span style="color: ' + light_faded_color + '">&bull;</span> &nbsp;'
 
 # hrule = '<hr color=' + light_faded_color + '>\n'
 hrule = '<hr style="border: 1px dashed ' + light_faded_color + ';">'
@@ -59,7 +59,7 @@ static_header = '''
 a{ color:''' + main_color + '''; text-decoration: none;}
 p{ text-align: center;}
 body {
-    width: 350pt;
+    max-width: 30em;
     margin: 0 auto;
 }
 </style>
@@ -102,9 +102,9 @@ def volume_control_bar( current_volume = None ) :
 
     html = ''
 
-    html += '<a href="/volume/down">&#8681;</a>' + separator
-    html += 'Volume ' + str(current_volume) + separator
-    html += '<a href="/volume/up">&#8679;</a>'
+    html += '<a href="/volume/down">&#9661;</a>' + 5*'&nbsp;'
+    html += 'Volume ' + str(current_volume) + 5*'&nbsp;'
+    html += '<a href="/volume/up">&#9651;</a>'
 
     return html
 
@@ -191,6 +191,8 @@ def edit_alarm_template( alarm = None, name = 'new', current_volume = 0 ) :
 
     html = get_header()
 
+    html += hrule
+
     if alarm is None :
         alarm = default_alarm.copy()
         alarm['volume'] = current_volume
@@ -199,8 +201,8 @@ def edit_alarm_template( alarm = None, name = 'new', current_volume = 0 ) :
 
     # time
     html += '<p>Time '
-    html += '<input name="hour" type="number" min=0 max=23 value=' + str(alarm['hour']) + ' />:'
-    html += '<input name="minute" type="number" min=0 max=59 value=' + str(alarm['minute']) + ' /></p>'
+    html += '<input name="hour" size="2" type="number" min=0 max=23 value=' + str(alarm['hour']) + ' />:'
+    html += '<input name="minute" size="2" type="number" min=0 max=59 value=' + str(alarm['minute']) + ' /></p>'
 
     # days
     html += '<p text-align = "left">'
@@ -231,11 +233,13 @@ def edit_alarm_template( alarm = None, name = 'new', current_volume = 0 ) :
 
     # duration
     html += '<p>Duration '
-    html += '<input name="duration" type="number" min=0 max=120 value=' + str( int(alarm['duration']/60) ) + ' /> min</p>'
+    html += '<input name="duration" size="3" type="number" min=0 max=120 value=' + str( int(alarm['duration']/60) ) + ' /> min</p>'
 
     # volume
     html += '<p>Volume '
-    html += '<input name="volume" type="number" min=0 max=100 value=' + str( int( alarm['volume'] ) ) + ' /></p>'
+    html += '<input name="volume" size="3" type="number" min=0 max=100 value=' + str( int( alarm['volume'] ) ) + ' /></p>'
+
+    html += hrule
 
     # submit form
     html += '<p><input value="Set alarm" type="submit" />'
