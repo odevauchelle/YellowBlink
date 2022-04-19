@@ -59,6 +59,7 @@ static_header = '''
 a{ color:''' + main_color + '''; text-decoration: none;}
 p{ text-align: center;}
 body {
+    background-color: white;
     max-width: 30em;
     margin: 0 auto;
 }

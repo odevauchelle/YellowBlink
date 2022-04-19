@@ -23,6 +23,8 @@ import alsaaudio
 #importing the os module
 import os
 
+default_recovery_stream = './recovery_stream/Turdus_merula.ogg'
+
 ########################
 #
 # Amp control
@@ -90,7 +92,7 @@ def play_command( url, duration = None, volume = None ) :
 
     return command
 
-def play_radio( url, duration = None, volume = None ) :
+def play_radio( url, duration = None, volume = None, recovery_stream = default_recovery_stream ) :
 
     if with_amp_control :
         ampli_control('on')
@@ -103,14 +105,34 @@ def play_radio( url, duration = None, volume = None ) :
     if not duration is None :
         command += ' -endpos ' + str( duration )
 
-    command += ' ' + url
+    command += ' '
 
-    # command += ' </dev/null >/dev/null 2>&1 &' # NO OUTPUT
+    if not recovery_stream is None :
 
-    if with_amp_control :
-        command += ' ; python3 ampli.py off'
+        # mplayer doesn't raise an error signal when it fails to stream.
+        # subprocess.run waits for execution to be complete.
+        # this blocks the execution !
 
-    subprocess.Popen( command, shell = True )
+        output = subprocess.run( command + url, shell = True, capture_output = True  )
+
+        if not 'Starting playback...' in output.stdout.decode() :
+            output = subprocess.run( command + recovery_stream , shell = True, capture_output = True )
+
+        if with_amp_control :
+            ampli_control('off')
+
+    else :
+
+        # no recovery file.
+        # launch the streaming in the background, but cannot control proper execution
+        # Does not block execution
+
+        command += url
+
+        if with_amp_control :
+            command += ' ; python3 ampli.py off'
+
+        subprocess.Popen( command, shell = True )
 
 
 def kill_command() :
