@@ -31,7 +31,7 @@ from socket import gethostname
 main_color = 'DarkCyan'
 faded_color = 'grey'
 light_faded_color = 'LightGrey'
-highlight_color = 'LemonChiffon'
+highlight_color = 'LightGoldenRodYellow'
 
 separator = '&nbsp; <span style="color: ' + light_faded_color + '">&bull;</span> &nbsp;'
 
