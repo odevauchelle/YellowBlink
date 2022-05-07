@@ -31,6 +31,7 @@ from socket import gethostname
 main_color = 'DarkCyan'
 faded_color = 'grey'
 light_faded_color = 'LightGrey'
+highlight_color = 'LemonChiffon'
 
 separator = '&nbsp; <span style="color: ' + light_faded_color + '">&bull;</span> &nbsp;'
 
@@ -119,10 +120,10 @@ def alarm_to_html( alarm, alarm_index ) :
         day = weekdays[i]
 
         if i in alarm['days_of_week'] :
-            style = "background-color: " + light_faded_color
+            style = "background-color: " + highlight_color
             # style += "; color: " + main_color
         else :
-            style = "color: grey"
+            style = "color: " + light_faded_color
 
         html += '<span style="' + style + '">'
         html += day_space + day + day_space
