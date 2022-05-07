@@ -112,7 +112,7 @@ def volume_control_bar( current_volume = None ) :
 def alarm_to_html( alarm, alarm_index ) :
 
     html = ''
-    day_space = '&emsp;'
+    day_space = '&nbsp;'*2
 
     for i in i_days :
 
@@ -125,11 +125,10 @@ def alarm_to_html( alarm, alarm_index ) :
             style = "color: grey"
 
         html += '<span style="' + style + '">'
-        html += day
+        html += day_space + day + day_space
         html += '</span>'
-        html += day_space
 
-    html = html[:-len(day_space)] # remove last space
+    # html = html[:-len(day_space)] # remove last space
 
     html += '<br>'
 
