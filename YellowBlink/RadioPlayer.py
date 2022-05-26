@@ -46,20 +46,23 @@ except :
 #
 #########################
 
-def get_mixer( sound_card_number = 0 ) :
-    return alsaaudio.Mixer( control='Speaker', cardindex = sound_card_number )
+def get_mixer( control = 'Speaker', cardindex = 0 ) :
+    return alsaaudio.Mixer( control = control, cardindex = cardindex )
 
-for sound_card_number in range(5) :
-    try :
-        mixer = get_mixer( sound_card_number )
-        break
+for cardindex in range(5) :
 
-    except :
-        pass
+    for control in ('Speaker', 'Analogue') :
+
+        try :
+            mixer = get_mixer( control=control, cardindex = cardindex )
+            break
+
+        except :
+            pass
 
 try :
     mixer
-    print( 'Soundcard: ', sound_card_number )
+    print( 'Soundcard: ', cardindex, 'Control:', control )
 
 except :
     print('No soundcard found!')
