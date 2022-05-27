@@ -34,7 +34,7 @@ class RotaryPlayer :
         self.commands = commands
         self.current_stream_index = 0
         self.current_stream = None
-        self.number_of_streams = len( self.streams )
+        self.max_stream_index = len( self.streams ) - 1
 
     def play( self ) :
 
@@ -53,15 +53,28 @@ class RotaryPlayer :
 
         self.current_stream = None
 
+    def switch_to( self, index ) :
+
+        if index > self.max_stream_index :
+            index = self.max_stram_index
+
+        elif index < 0 :
+            index = 0
+
+        was_playing = self.is_playing()
+        self.stop()
+        self.current_stream_index = index
+
+        if was_playing :
+            self.play()
+
     def next( self ) :
 
-        if self.current_stream_index < self.number_of_streams - 1 :
-            self.current_stream_index += 1
+        self.switch_to( self.current_stream_index + 1 )
 
     def previous( self ) :
 
-        if self.current_stream_index > 0 :
-            self.current_stream_index -= 1
+        self.switch_to( self.current_stream_index - 1 )
 
     def get_current_stream_name( self ) :
         return self.streams[ self.current_stream_index ]['name']
