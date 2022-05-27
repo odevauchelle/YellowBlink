@@ -76,6 +76,14 @@ class RotaryPlayer :
         else :
             return True
 
+    def play_or_stop( self ) :
+
+        if self.is_playing() :
+            self.stop()
+        else :
+            self.play()
+
+
 class MetaPlayer :
 
     def __init__( self, players ) :
@@ -111,6 +119,9 @@ class MetaPlayer :
 
     def stop(self) :
         self.get_current_player().stop()
+
+    def play_or_stop(self) :
+        self.get_current_player().play_or_stop()
 
     def get_current_stream_name(self) :
         return self.get_current_player().get_player_name(), self.get_current_player().get_current_stream_name()
@@ -149,7 +160,7 @@ if __name__ == '__main__' :
 
     for i in range(3) :
         print(*Players.get_current_stream_name())
-        Players.play()
+        Players.play_or_stop()
         sleep(10)
-        Players.stop()
+        Players.play_or_stop()
         Players.next()
