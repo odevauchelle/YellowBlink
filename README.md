@@ -14,20 +14,28 @@ run( host='0.0.0.0', port=8080, debug = False )
 
 Tested on Debian and Raspberry Pi OS (Bullseye).
 
-
 ```
 apt-get install mplayer python3-alsaaudio python3-crontab python3-pip
 ```
 ```
 pip3 install bottle RPi.GPIO
 ```
-## Default sound card
+
+To use DAB+ radio:
+
+```
+apt-get install welle.io
+```
+
+## Sound card
 
 Edit `/usr/share/alsa/alsa.conf` and change `0` to `1` in the following lines:
 ```
 defaults.ctl.card 0
 defaults.pcm.card 0
 ```
+
+For a HifiBerry DAC+ soundcard, the install procedure is [here](https://www.hifiberry.com/docs/archive/hifiberry-software-configuration/).
 
 ## Locale
 
@@ -39,20 +47,26 @@ Go to the radio's webpage, start streaming it, and then find the streaming url i
 
 ## GPIO pins
 
+For the alarm clock:
+
 | Use | GPIO |
 |--|--|
 | Status led | 18 |
 | Amp switch | 17 |
 | Button | 24 |
 
-## Side issues
+For the DAB+ radio player:
 
-### Status led
+| Use | GPIO |
+|--|--|
+| Status led | 17 |
+| Rotary encoder | 10 & 9 |
+| Rotary push | 11 |
+| Mode switch | 23 |
+
+## Status led
 
 To show the Raspberry status on a GPIO led, as explained [here](https://forums.raspberrypi.com/viewtopic.php?t=146455), edit `/boot/config.txt` and add:
 ```
 dtoverlay=pi3-act-led,activelow=on,gpio=18
 ```
-## To do
-
-- Add a recovery soundtrack in case of streaming failure
