@@ -100,7 +100,7 @@ class MetaPlayer :
         was_playing = self.get_current_player().is_playing()
         self.get_current_player().stop()
 
-        if self.current_index <= self.max_index :
+        if self.current_index < self.max_index :
             self.current_index += 1
         else :
             self.current_index = 0
