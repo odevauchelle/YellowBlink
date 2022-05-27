@@ -21,14 +21,15 @@ DABradios = [
 
 ##########################
 #
-# Generic player class
+# Generic player classes
 #
 ##########################
 
 class RotaryPlayer :
 
-    def __init__( self, streams, **commands ) :
+    def __init__( self, streams, name, **commands ) :
 
+        self.name = name
         self.streams = streams
         self.commands = commands
         self.current_stream_index = 0
@@ -37,11 +38,19 @@ class RotaryPlayer :
 
     def play( self ) :
 
-        self.current_stream = self.commands['play']( self.streams[ self.current_stream_index ] )
+        if self.is_playing() :
+            print('Already playing')
+
+        else :
+            self.current_stream = self.commands['play']( self.streams[ self.current_stream_index ] )
 
     def stop( self ) :
 
-        self.current_stream.kill() # current_stream is a subprocess object
+        try :
+            self.current_stream.kill() # current_stream is a subprocess object
+        except :
+            print("Can't stop player. Maybe stopped already.")
+
         self.current_stream = None
 
     def next( self ) :
@@ -57,6 +66,55 @@ class RotaryPlayer :
     def get_current_stream_name( self ) :
         return self.streams[ self.current_stream_index ]['name']
 
+    def get_player_name(self):
+        return self.name
+
+    def is_playing( self ) :
+
+        if self.current_stream is None :
+            return False
+        else :
+            return True
+
+class MetaPlayer :
+
+    def __init__( self, players ) :
+
+        self.players = players
+        self.current_index = 0
+        self.max_index = len( players ) - 1
+
+    def get_current_player( self ) :
+        return self.players[ self.current_index ]
+
+    def next_player( self ) :
+
+        was_playing = self.get_current_player().is_playing()
+        self.get_current_player().stop()
+
+        if self.current_index <= self.max_index :
+            self.current_index += 1
+        else :
+            self.current_index = 0
+
+        if was_playing :
+            self.get_current_player().play()
+
+    def next(self) :
+        self.get_current_player().next()
+
+    def previous(self) :
+        self.get_current_player().previous()
+
+    def play(self) :
+        self.get_current_player().play()
+
+    def stop(self) :
+        self.get_current_player().stop()
+
+    def get_current_stream_name(self) :
+        return self.get_current_player().get_player_name(), self.get_current_player().get_current_stream_name()
+
 ##########################
 #
 # Specific players
@@ -65,13 +123,17 @@ class RotaryPlayer :
 
 WebPlayer = RotaryPlayer(
     streams = webradios,
+    name = 'Web',
     play = lambda webradio: subprocess.Popen( [ 'mplayer', webradio['url'] ] ),
 )
 
 DABPlayer = RotaryPlayer(
     streams = DABradios,
+    name = 'DAB',
     play = lambda DABradio: subprocess.Popen( [ 'welle-cli', '-c', DABradio['channel'], '-p', DABradio['program'] ] ),
 )
+
+Players = MetaPlayer( [ DABPlayer, WebPlayer ] )
 
 ##########################
 #
@@ -83,11 +145,11 @@ if __name__ == '__main__' :
 
     from time import sleep
 
-    Player = WebPlayer
+    Players.next_player()
 
     for i in range(3) :
-        print('\n' + Player.get_current_stream_name() + '\n')
-        Player.play()
+        print(*Players.get_current_stream_name())
+        Players.play()
         sleep(10)
-        Player.stop()
-        Player.next()
+        Players.stop()
+        Players.next()
