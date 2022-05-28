@@ -25,7 +25,7 @@ path = os.getcwd() # current directory
 from crontab import CronTab
 cron = CronTab( user = True )
 
-sleeping_beast =  sys.argv[0]
+sleeping_beast =  sys.argv[1]
 
 if sleeping_beast == 'LungFish' :
     launch_progs = ['LungFish.py', 'button.py']
