@@ -33,7 +33,7 @@ if sleeping_beast == 'LungFish' :
     sleep_before_launch = 30
 
 elif sleeping_beast == 'SeaUrchin' :
-    launch_prog = ['SeaUrchin.py']
+    launch_progs = ['SeaUrchin.py']
     cron_comments = ['SeaUrchinInstall']
     sleep_before_launch = 15
 
