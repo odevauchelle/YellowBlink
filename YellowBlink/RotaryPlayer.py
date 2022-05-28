@@ -161,6 +161,15 @@ Players = MetaPlayer( [ DABPlayer, WebPlayer ] )
 
 ##########################
 #
+# Other functions
+#
+##########################
+
+def shutdown() :
+    subprocess.call( ['sudo', 'shutdown', '-h', 'now'] )
+
+##########################
+#
 # Try it out
 #
 ##########################

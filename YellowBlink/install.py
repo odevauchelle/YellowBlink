@@ -18,13 +18,24 @@
 # Olivier Devauchelle, 2021
 
 import os
+import sys
 
 path = os.getcwd() # current directory
 
 from crontab import CronTab
 cron = CronTab( user = True )
 
-launch_progs = ['LungFish.py', 'button.py']
+sleeping_beast =  sys.argv[0]
+
+if sleeping_beast == 'LungFish' :
+    launch_progs = ['LungFish.py', 'button.py']
+    cron_comments = ['YellowBlink', 'YellowBlinkInstall']
+    sleep_before_launch = 30
+
+elif sleeping_beast == 'SeaUrchin' :
+    launch_prog = ['SeaUrchin.py']
+    cron_comments = ['SeaUrchinInstall']
+    sleep_before_launch = 15
 
 ###############
 #
@@ -32,7 +43,7 @@ launch_progs = ['LungFish.py', 'button.py']
 #
 ###############
 
-for comment in ['YellowBlink', 'YellowBlinkInstall'] :
+for comment in cron_comments :
     cron.remove_all( comment = comment )
 
 ###############
@@ -42,8 +53,8 @@ for comment in ['YellowBlink', 'YellowBlinkInstall'] :
 ###############
 
 for launch_prog in launch_progs :
-    command = 'sleep 30 && (cd ' + path + '; ' + 'python3 ' + launch_prog + ')'
-    job = cron.new( comment = 'YellowBlinkInstall', command = command )
+    command = 'sleep ' + str(sleep_before_launch) + ' && (cd ' + path + '; ' + 'python3 ' + launch_prog + ')'
+    job = cron.new( comment = cron_comments[-1], command = command )
     job.every_reboot()
 
 ##############
@@ -54,5 +65,5 @@ for launch_prog in launch_progs :
 
 cron.write()
 
-for job in cron.find_comment('YellowBlinkInstall') :
+for job in cron.find_comment(cron_comments[-1]) :
     print(job)
