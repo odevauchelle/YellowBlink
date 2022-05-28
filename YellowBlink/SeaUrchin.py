@@ -19,7 +19,6 @@ def ledify( some_function, n = 1 ) :
     def ledified_function() :
         led.blink( on_time=.1, off_time=.1, n = n, background = True )
         some_function()
-        led.on()
     return ledified_function
 
 #######################
@@ -27,8 +26,6 @@ def ledify( some_function, n = 1 ) :
 # Actions
 #
 ######################
-
-led.on()
 
 knob.when_rotated_clockwise = ledify( Players.next )
 knob.when_rotated_counter_clockwise = ledify( Players.previous )
