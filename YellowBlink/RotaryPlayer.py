@@ -14,9 +14,9 @@ webradios = [
 ]
 
 DABradios = [
-    dict( name = 'FIP', channel = '8C', program = '"FIP"'),
-    dict( name = 'France Culture', channel = '8C', program = '"FRANCE CULTURE"'),
-    dict( name = 'France Info', channel = '8C', program = '"FRANCE INFO"'),
+    dict( name = 'FIP', channel = '8C', program = 'FIP'),
+    dict( name = 'France Culture', channel = '8C', program = 'FRANCE CULTURE'),
+    dict( name = 'France Info', channel = '8C', program = 'FRANCE INFO'),
 ]
 
 ##########################
