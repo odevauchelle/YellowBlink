@@ -13,7 +13,7 @@ from RotaryPlayer import Players, shutdown
 led = LED(17)
 switch_button = Button(23, bounce_time = 0.01, hold_time = 2 )
 play_button = Button(11, bounce_time = 0.01)
-knob = RotaryEncoder(9, 10)
+knob = RotaryEncoder( 10, 9 )
 
 def ledify( some_function, n = 1 ) :
     def ledified_function() :
@@ -33,7 +33,7 @@ knob.when_rotated_clockwise = ledify( Players.next )
 knob.when_rotated_counter_clockwise = ledify( Players.previous )
 play_button.when_pressed = ledify( Players.play_or_stop )
 switch_button.when_pressed = ledify( Players.next_player )
-switch_button.when_held = ledify( shutdown(), n = 3 )
+switch_button.when_held = ledify( shutdown, n = 3 )
 
 
 #knob.when_rotated_clockwise = lambda : print('next!')
