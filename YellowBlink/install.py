@@ -52,7 +52,7 @@ for comment in cron_comments :
 #
 ###############
 
-if not argv[1] in [ '-u', '--unistall' ] :
+if not sys.argv[1] in [ '-u', '--unistall' ] :
 
     for launch_prog in launch_progs :
         command = 'sleep ' + str(sleep_before_launch) + ' && (cd ' + path + '; ' + 'python3 ' + launch_prog + ')'
