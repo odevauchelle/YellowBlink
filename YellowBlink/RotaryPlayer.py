@@ -1,4 +1,6 @@
 import subprocess
+import os
+import signal
 
 ##########################
 #
@@ -47,7 +49,8 @@ class RotaryPlayer :
     def stop( self ) :
 
         try :
-            self.current_stream.kill() # current_stream is a subprocess object
+            # self.current_stream.kill() # current_stream is a subprocess object
+            os.killpg( os.getpgid( self.current_stream.pid ), signal.SIGTERM )
         except :
             print("Can't stop player. Maybe stopped already.")
 
@@ -148,13 +151,15 @@ class MetaPlayer :
 WebPlayer = RotaryPlayer(
     streams = webradios,
     name = 'Web',
-    play = lambda webradio: subprocess.Popen( [ 'mplayer', webradio['url'] ] ),
+    play = lambda webradio: subprocess.Popen( 'mplayer ' + webradio['url'], shell = True, preexec_fn=os.setsid ),
+    # play = lambda webradio: subprocess.Popen( [ 'mplayer', webradio['url'] ] ),
 )
 
 DABPlayer = RotaryPlayer(
     streams = DABradios,
     name = 'DAB',
-    play = lambda DABradio: subprocess.Popen( [ 'welle-cli', '-c', DABradio['channel'], '-p', DABradio['program'] ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
+    play = lambda DABradio: subprocess.Popen( 'welle-cli -c ' + DABradio['channel'] + ' -p ' + DABradio['program'], shell = True, preexec_fn=os.setsid, stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
+    # play = lambda DABradio: subprocess.Popen( [ 'welle-cli', '-c', DABradio['channel'], '-p', DABradio['program'] ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
 )
 
 Players = MetaPlayer( [ DABPlayer, WebPlayer ] )
