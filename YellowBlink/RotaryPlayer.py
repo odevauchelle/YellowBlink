@@ -154,7 +154,7 @@ WebPlayer = RotaryPlayer(
 DABPlayer = RotaryPlayer(
     streams = DABradios,
     name = 'DAB',
-    play = lambda DABradio: subprocess.Popen( [ 'welle-cli', '-c', DABradio['channel'], '-p', DABradio['program'] ], stdout=subprocess.DEVNULL ),
+    play = lambda DABradio: subprocess.Popen( [ 'welle-cli', '-c', DABradio['channel'], '-p', DABradio['program'] ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
 )
 
 Players = MetaPlayer( [ DABPlayer, WebPlayer ] )

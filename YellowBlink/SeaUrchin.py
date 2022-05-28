@@ -27,6 +27,8 @@ def ledify( some_function, n = 1 ) :
 #
 ######################
 
+led.on()
+
 knob.when_rotated_clockwise = ledify( Players.next )
 knob.when_rotated_counter_clockwise = ledify( Players.previous )
 play_button.when_pressed = ledify( Players.play_or_stop )

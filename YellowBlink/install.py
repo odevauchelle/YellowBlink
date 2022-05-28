@@ -25,7 +25,7 @@ path = os.getcwd() # current directory
 from crontab import CronTab
 cron = CronTab( user = True )
 
-sleeping_beast =  sys.argv[1]
+sleeping_beast =  sys.argv[-1]
 
 if sleeping_beast == 'LungFish' :
     launch_progs = ['LungFish.py', 'button.py']
@@ -52,10 +52,12 @@ for comment in cron_comments :
 #
 ###############
 
-for launch_prog in launch_progs :
-    command = 'sleep ' + str(sleep_before_launch) + ' && (cd ' + path + '; ' + 'python3 ' + launch_prog + ')'
-    job = cron.new( comment = cron_comments[-1], command = command )
-    job.every_reboot()
+if not argv[1] in [ '-u', '--unistall' ] :
+
+    for launch_prog in launch_progs :
+        command = 'sleep ' + str(sleep_before_launch) + ' && (cd ' + path + '; ' + 'python3 ' + launch_prog + ')'
+        job = cron.new( comment = cron_comments[-1], command = command )
+        job.every_reboot()
 
 ##############
 #
