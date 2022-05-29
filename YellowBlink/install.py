@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# Olivier Devauchelle, 2021
+# Olivier Devauchelle, 2022
 
 import os
 import sys
