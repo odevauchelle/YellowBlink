@@ -36,7 +36,7 @@ knob = RotaryEncoder( 10, 9 )
 
 def blink( n = 1, blink_time = 0.1 ):
 
-    for _ in range(n):
+    for _ in range( 2*n - 1 ):
         led.toggle()
         sleep(blink_time)
 

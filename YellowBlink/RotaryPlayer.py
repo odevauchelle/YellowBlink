@@ -65,7 +65,7 @@ class RotaryPlayer :
     def wake_up( self ) :
 
         try :
-            self.background_process = commands['launch_background_process']
+            self.background_process = commands['launch_background_process']()
         except :
             pass
 
