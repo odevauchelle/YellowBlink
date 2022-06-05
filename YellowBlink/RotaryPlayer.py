@@ -65,7 +65,7 @@ class RotaryPlayer :
     def wake_up( self ) :
 
         try :
-            self.background_process = commands['launch_background_process']()
+            self.background_process = self.commands['launch_background_process']()
         except :
             pass
 
@@ -201,7 +201,7 @@ WebPlayer = RotaryPlayer(
 DABPlayer = RotaryPlayer(
     name = 'DAB',
     streams = DABradios,
-    launch_background_process = lambda DABradio: subprocess.Popen( [ 'welle-cli', '-c', DAB['channel'], '-w', DAB['port'] ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
+    launch_background_process = lambda : subprocess.Popen( [ 'welle-cli', '-c', DAB['channel'], '-w', DAB['port'] ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
     # play = lambda DABradio: subprocess.Popen( 'welle-cli -c ' + DABradio['channel'] + ' -p ' + DABradio['program'], shell = True, preexec_fn=os.setsid, stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
     play = lambda DABradio: subprocess.Popen( [ 'mplayer', 'http://localhost:8888/mp3/' + DABradio['sid'] ] ),
 )
