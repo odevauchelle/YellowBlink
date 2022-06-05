@@ -20,19 +20,58 @@ import sys
 sys.path.append('../YellowBlink/YellowBlink')
 from gpiozero import LED, Button, RotaryEncoder
 from signal import pause
-from RotaryPlayer import Players, shutdown
 from time import sleep
+
+######################
+#
+# Fake player
+#
+######################
+
+if sys.argv[-1] == '--fake' :
+
+    class FakePlayers :
+
+        def __init__(self) :
+            self.name = 'Fake'
+
+        def next(self) :
+            print('next')
+
+        def previous(self) :
+            print('previous')
+
+        def next_player(self) :
+            print('next player')
+
+        def play_or_stop(self) :
+            print('play or stop')
+
+    Players = FakePlayers()
+
+    def shutdown() :
+        print('shutdown')
+
+else :
+    from RotaryPlayer import Players, shutdown
+
 
 #####################
 #
-# GPIO
+# GPIO connections
 #
 ######################
 
 led = LED(17)
-switch_button = Button(23, bounce_time = 0.01, hold_time = 2 )
-play_button = Button(11, bounce_time = 0.01)
+switch_button = Button(23, hold_time = 2 )
+play_button = Button(11 )
 knob = RotaryEncoder( 10, 9 )
+
+#####################
+#
+# LED blink
+#
+######################
 
 def blink( n = 1, blink_time = 0.1 ):
 
@@ -55,6 +94,22 @@ def ledify( the_function, n = 1 ) :
 
 #######################
 #
+# Shutdown control
+#
+######################
+
+def switch_player_or_switch_off() :
+
+    if play_button.is_held :
+        blink(5)
+        shutdown()
+
+    else :
+        blink(2)
+        Players.next_player()
+
+#######################
+#
 # Actions
 #
 ######################
@@ -63,14 +118,9 @@ led.on()
 
 knob.when_rotated_clockwise = ledify( Players.next )
 knob.when_rotated_counter_clockwise = ledify( Players.previous )
-play_button.when_pressed = ledify( Players.play_or_stop )
-play_button.when_held = ledify( Players.next_player, n = 2 )
-switch_button.when_held = ledify( shutdown, n = 3 )
+play_button.when_released = ledify( Players.play_or_stop )
 
+switch_button.when_held = switch_player_or_switch_off
 
-#knob.when_rotated_clockwise = lambda : print('next!')
-#knob.when_rotated_counter_clockwise = lambda : print('previous!')
-#play_button.when_pressed = lambda : print('play or stop!')
-#switch_button.when_pressed = lambda : print('next player!')
 
 pause()
