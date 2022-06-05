@@ -19,7 +19,9 @@
 
 import subprocess
 # import os
-import signal
+# import signal
+import requests
+
 
 ##########################
 #
@@ -194,15 +196,18 @@ class MetaPlayer :
 WebPlayer = RotaryPlayer(
     name = 'Web',
     streams = webradios,
-    # play = lambda webradio: subprocess.Popen( 'mplayer ' + webradio['url'], shell = True, preexec_fn=os.setsid ),
     play = lambda webradio: subprocess.Popen( [ 'mplayer', webradio['url'] ] ),
 )
+
+def launch_welle_server( channel, port ) :
+    welle_server_process = subprocess.Popen( [ 'welle-cli', '-c', channel, '-w', port ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL )
+    current_channel = req.get("http://localhost:"  + port + "/channel") # wait until server is set up
+    return welle_server_process
 
 DABPlayer = RotaryPlayer(
     name = 'DAB',
     streams = DABradios,
-    launch_background_process = lambda : subprocess.Popen( [ 'welle-cli', '-c', DAB['channel'], '-w', DAB['port'] ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
-    # play = lambda DABradio: subprocess.Popen( 'welle-cli -c ' + DABradio['channel'] + ' -p ' + DABradio['program'], shell = True, preexec_fn=os.setsid, stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
+    launch_background_process = lambda : launch_welle_server( **DAB ),
     play = lambda DABradio: subprocess.Popen( [ 'mplayer', 'http://localhost:8888/mp3/' + DABradio['sid'] ] ),
 )
 
