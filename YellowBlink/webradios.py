@@ -1,3 +1,6 @@
+#!/bin/python3
+# -*- coding: utf-8 -*-
+
 webradios = {
     'fip' : dict( full_name = 'FIP', url = 'http://icecast.radiofrance.fr/fip-lofi.mp3' ),
     'bbc4' : dict( full_name = 'BBC 4', url = 'http://stream.live.vc.bbcmedia.co.uk/bbc_radio_fourfm'),

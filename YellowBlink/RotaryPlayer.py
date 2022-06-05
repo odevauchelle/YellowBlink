@@ -1,5 +1,5 @@
 
-#!/usr/bin/env python
+#!/bin/python3
 # -*- coding: utf-8 -*-
 
 # This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 # Olivier Devauchelle, 2022
 
 import subprocess
-import os
+# import os
 import signal
 
 ##########################
@@ -34,10 +34,12 @@ webradios = [
     dict( name = 'Fr. Culture', url = 'http://icecast.radiofrance.fr/franceculture-lofi.mp3'),
 ]
 
+DAB = dict( channel = '8C', port = '8888' )
+
 DABradios = [
-    dict( name = 'FIP', channel = '8C', program = 'FIP'),
-    dict( name = 'France Culture', channel = '8C', program = 'FRANCE CULTURE'),
-    dict( name = 'France Info', channel = '8C', program = 'FRANCE INFO'),
+    dict( name = 'FIP', program = 'FIP', sid = '0xf204'),
+    dict( name = 'France Culture', program = 'FRANCE CULTURE', sid = '0xf202'),
+    dict( name = 'France Info', program = 'FRANCE INFO', sid = '0xf206'),
 ]
 
 ##########################
@@ -48,14 +50,32 @@ DABradios = [
 
 class RotaryPlayer :
 
-    def __init__( self, streams, name, **commands ) :
+    def __init__( self, name, streams, **commands ) :
 
         self.name = name
         self.streams = streams
         self.commands = commands
+
         self.current_stream_index = 0
-        self.current_stream = None
         self.max_stream_index = len( self.streams ) - 1
+
+        self.current_stream = None
+        self.background_process = None
+
+    def wake_up( self ) :
+
+        try :
+            self.background_process = commands['launch_background_process']
+        except :
+            pass
+
+    def sleep( self ) :
+
+        try :
+            self.stop()
+            self.background_process.kill()
+        except :
+            pass
 
     def play( self ) :
 
@@ -68,8 +88,8 @@ class RotaryPlayer :
     def stop( self ) :
 
         try :
-            # self.current_stream.kill() # current_stream is a subprocess object
-            os.killpg( os.getpgid( self.current_stream.pid ), signal.SIGTERM )
+            self.current_stream.kill() # current_stream is a subprocess object
+            # os.killpg( os.getpgid( self.current_stream.pid ), signal.SIGTERM )
         except :
             print("Can't stop player. Maybe stopped already.")
 
@@ -127,18 +147,22 @@ class MetaPlayer :
         self.current_index = 0
         self.max_index = len( players ) - 1
 
+        self.get_current_player().wake_up()
+
     def get_current_player( self ) :
         return self.players[ self.current_index ]
 
     def next_player( self ) :
 
         was_playing = self.get_current_player().is_playing()
-        self.get_current_player().stop()
+        self.get_current_player().sleep()
 
         if self.current_index < self.max_index :
             self.current_index += 1
         else :
             self.current_index = 0
+
+        self.get_current_player().wake_up()
 
         if was_playing :
             self.get_current_player().play()
@@ -168,17 +192,18 @@ class MetaPlayer :
 ##########################
 
 WebPlayer = RotaryPlayer(
-    streams = webradios,
     name = 'Web',
-    play = lambda webradio: subprocess.Popen( 'mplayer ' + webradio['url'], shell = True, preexec_fn=os.setsid ),
-    # play = lambda webradio: subprocess.Popen( [ 'mplayer', webradio['url'] ] ),
+    streams = webradios,
+    # play = lambda webradio: subprocess.Popen( 'mplayer ' + webradio['url'], shell = True, preexec_fn=os.setsid ),
+    play = lambda webradio: subprocess.Popen( [ 'mplayer', webradio['url'] ] ),
 )
 
 DABPlayer = RotaryPlayer(
-    streams = DABradios,
     name = 'DAB',
-    play = lambda DABradio: subprocess.Popen( 'welle-cli -c ' + DABradio['channel'] + ' -p ' + DABradio['program'], shell = True, preexec_fn=os.setsid, stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
-    # play = lambda DABradio: subprocess.Popen( [ 'welle-cli', '-c', DABradio['channel'], '-p', DABradio['program'] ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
+    streams = DABradios,
+    launch_background_process = lambda DABradio: subprocess.Popen( [ 'welle-cli', '-c', DAB['channel'], '-w', DAB['port'] ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
+    # play = lambda DABradio: subprocess.Popen( 'welle-cli -c ' + DABradio['channel'] + ' -p ' + DABradio['program'], shell = True, preexec_fn=os.setsid, stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL ),
+    play = lambda DABradio: subprocess.Popen( [ 'mplayer', 'http://localhost:8888/mp3/' + DABradio['sid'] ] ),
 )
 
 Players = MetaPlayer( [ DABPlayer, WebPlayer ] )
