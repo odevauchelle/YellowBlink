@@ -32,8 +32,8 @@ import requests
 webradios = [
     dict( name = 'BBC 4', url = 'http://stream.live.vc.bbcmedia.co.uk/bbc_radio_fourfm'),
     dict( name = 'NPR', url = 'https://npr-ice.streamguys1.com/live.mp3'),
-    dict( name = 'FIP', url = 'http://icecast.radiofrance.fr/fip-lofi.mp3' ),
-    dict( name = 'Fr. Culture', url = 'http://icecast.radiofrance.fr/franceculture-lofi.mp3'),
+    dict( name = 'FIP', url = 'http://icecast.radiofrance.fr/fip-midfi.mp3' ),
+    dict( name = 'Fr. Culture', url = 'http://icecast.radiofrance.fr/franceculture-midfi.mp3'),
 ]
 
 DAB = dict( channel = '8C', port = '8888' )
