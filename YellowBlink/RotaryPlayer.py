@@ -77,8 +77,10 @@ class RotaryPlayer :
 
         try :
             self.background_process.kill()
+
         except :
             print("Can't stop background_process. Using killall")
+            subprocess.Popen( [ 'killall', 'welle-cli'] )
 
     def play( self ) :
 
@@ -201,8 +203,8 @@ WebPlayer = RotaryPlayer(
 )
 
 def launch_welle_server( channel, port ) :
-    # welle_server_process = subprocess.Popen( [ 'welle-cli', '-c', channel, '-w', port ] ) # stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL )
-    welle_server_process = subprocess.Popen( [ 'exec', 'welle-cli', '-c', channel, '-w', port ] , stdout=subprocess.PIPE, shell=True) # from Bryant Hansen, https://stackoverflow.com/questions/4789837/how-to-terminate-a-python-subprocess-launched-with-shell-true
+    welle_server_process = subprocess.Popen( [ 'welle-cli', '-c', channel, '-w', port ] ) # stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL )
+    # welle_server_process = subprocess.Popen( [ 'exec', 'welle-cli', '-c', channel, '-w', port ] , stdout=subprocess.PIPE, shell=True) # from Bryant Hansen, https://stackoverflow.com/questions/4789837/how-to-terminate-a-python-subprocess-launched-with-shell-true
     current_channel = req.get("http://localhost:"  + port + "/channel") # wait until server is set up
     return welle_server_process
 
