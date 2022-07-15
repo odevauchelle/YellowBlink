@@ -73,11 +73,12 @@ class RotaryPlayer :
 
     def sleep( self ) :
 
+        self.stop()
+
         try :
-            self.stop()
             self.background_process.kill()
         except :
-            pass
+            print("Can't stop background_process.")
 
     def play( self ) :
 
@@ -200,7 +201,7 @@ WebPlayer = RotaryPlayer(
 )
 
 def launch_welle_server( channel, port ) :
-    welle_server_process = subprocess.Popen( [ 'welle-cli', '-c', channel, '-w', port ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL )
+    welle_server_process = subprocess.Popen( [ 'welle-cli', '-c', channel, '-w', port ] ) # stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL )
     current_channel = req.get("http://localhost:"  + port + "/channel") # wait until server is set up
     return welle_server_process
 
