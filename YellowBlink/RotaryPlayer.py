@@ -212,7 +212,7 @@ DABPlayer = RotaryPlayer(
     name = 'DAB',
     streams = DABradios,
     launch_background_process = lambda : launch_welle_server( **DAB ),
-    play = lambda DABradio: subprocess.Popen( [ 'mplayer', 'http://localhost:8888/mp3/' + DABradio['sid'] ] ),
+    play = lambda DABradio: subprocess.Popen( [ 'mplayer', 'http://localhost:' + DAB['port'] + '/mp3/' + DABradio['sid'] ] ),
 )
 
 Players = MetaPlayer( [ DABPlayer, WebPlayer ] )

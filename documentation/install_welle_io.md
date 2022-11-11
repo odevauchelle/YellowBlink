@@ -43,4 +43,4 @@ cmake .. -DRTLSDR=1 -DSOAPYSDR=1 -DBUILD_WELLE_IO=OFF -DBUILD_WELLE_CLI=ON
 make
 make install
 ```
-After this, `welle-cli` should be in `/usr/local/bin`.
+After this, `welle-cli` should be in `/usr/local/bin`. However, to get the web interface running,  `welle-cli` must be executed from `/usr/local/share/welle-io/html`.
