@@ -25,6 +25,12 @@ path = os.getcwd() # current directory
 from crontab import CronTab
 cron = CronTab( user = True )
 
+# manually installed welle.io wouldn't launch with cron
+
+for var in ['PATH', 'SHELL'] :
+    cron.env[var] = os.getenv(var)
+
+
 sleeping_beast =  sys.argv[-1]
 
 if sleeping_beast == 'LungFish' :
@@ -35,7 +41,7 @@ if sleeping_beast == 'LungFish' :
 elif sleeping_beast == 'SeaUrchin' :
     launch_progs = ['SeaUrchin.py']
     cron_comments = ['SeaUrchinInstall']
-    sleep_before_launch = 30
+    sleep_before_launch = 15
 
 ###############
 #
@@ -56,6 +62,7 @@ if not sys.argv[1] in [ '-u', '--unistall' ] :
 
     for launch_prog in launch_progs :
         command = 'sleep ' + str(sleep_before_launch) + ' && (cd ' + path + '; ' + 'python3 ' + launch_prog + ')'
+
         job = cron.new( comment = cron_comments[-1], command = command )
         job.every_reboot()
 
