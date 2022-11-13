@@ -63,9 +63,11 @@ if not sys.argv[1] in [ '-u', '--unistall' ] :
 
         # welle-cli wouldn't launch with cron
 
-        for var in ['PATH', 'SHELL', 'XDG_RUNTIME_DIR'] :
+        for var in ['PATH', 'SHELL'] :
             job.env[var] = os.getenv(var)
 
+        for var in ['XDG_RUNTIME_DIR'] :
+            job.env['export ' + var] = os.getenv(var)
 
 ##############
 #
