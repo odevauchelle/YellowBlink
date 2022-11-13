@@ -25,11 +25,6 @@ path = os.getcwd() # current directory
 from crontab import CronTab
 cron = CronTab( user = True )
 
-# manually installed welle.io wouldn't launch with cron
-
-for var in ['PATH', 'SHELL'] :
-    cron.env[var] = os.getenv(var)
-
 
 sleeping_beast =  sys.argv[-1]
 
@@ -65,6 +60,12 @@ if not sys.argv[1] in [ '-u', '--unistall' ] :
 
         job = cron.new( comment = cron_comments[-1], command = command )
         job.every_reboot()
+
+        # manually installed welle.io wouldn't launch with cron
+
+        for var in ['PATH', 'SHELL'] :
+            job.env[var] = os.getenv(var)
+
 
 ##############
 #

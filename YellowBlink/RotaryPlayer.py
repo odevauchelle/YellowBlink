@@ -39,9 +39,9 @@ webradios = [
 DAB = dict( channel = '8C', port = '8888' )
 
 DABradios = [
-    dict( name = 'FIP', program = 'FIP', sid = '0xf204'),
-    dict( name = 'France Culture', program = 'FRANCE CULTURE', sid = '0xf202'),
-    dict( name = 'France Info', program = 'FRANCE INFO', sid = '0xf206'),
+    dict( name = 'FIP', channel = '8C', program = 'FIP', sid = '0xf204'),
+    dict( name = 'France Culture', channel = '8C', program = 'FRANCE CULTURE', sid = '0xf202'),
+    dict( name = 'France Info', channel = '8C', program = 'FRANCE INFO', sid = '0xf206'),
 ]
 
 ##########################
@@ -218,7 +218,7 @@ WebPlayer = RotaryPlayer(
 DABPlayer = RotaryPlayer(
     name = 'DAB',
     streams = DABradios,
-    play = lambda DABradio: subprocess.Popen( [ 'welle-cli', '-T', '-c', DAB['channel'], '-p', DABradio['program'] ] ),
+    play = lambda DABradio: subprocess.Popen( [ 'welle-cli', '-T', '-c', DABradio['channel'], '-p', DABradio['program'] ] ),
 )
 
 Players = MetaPlayer( [ DABPlayer, WebPlayer ] )
