@@ -40,7 +40,7 @@ if sleeping_beast == 'LungFish' :
 elif sleeping_beast == 'SeaUrchin' :
     launch_progs = ['SeaUrchin.py']
     cron_comments = ['SeaUrchinInstall']
-    sleep_before_launch = 15
+    sleep_before_launch = 30
 
 ###############
 #
@@ -60,7 +60,7 @@ for comment in cron_comments :
 if not sys.argv[1] in [ '-u', '--unistall' ] :
 
     for launch_prog in launch_progs :
-        command = 'sleep ' + str(sleep_before_launch) + ' && (cd ' + path + '; ' + 'python3 ' + launch_prog + ')'
+        command = 'sleep ' + str(sleep_before_launch) + ' && bash -l (cd ' + path + '; ' + 'python3 ' + launch_prog + ')'
 
         job = cron.new( comment = cron_comments[-1], command = command )
         job.every_reboot()
