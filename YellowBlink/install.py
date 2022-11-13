@@ -61,9 +61,9 @@ if not sys.argv[1] in [ '-u', '--unistall' ] :
         job = cron.new( comment = cron_comments[-1], command = command )
         job.every_reboot()
 
-        # manually installed welle.io wouldn't launch with cron
+        # welle-cli wouldn't launch with cron
 
-        for var in ['PATH', 'SHELL'] :
+        for var in ['PATH', 'SHELL', 'XDG_RUNTIME_DIR'] :
             job.env[var] = os.getenv(var)
 
 
