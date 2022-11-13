@@ -67,7 +67,7 @@ if not sys.argv[1] in [ '-u', '--unistall' ] :
             job.env[var] = os.getenv(var)
 
         for var in ['XDG_RUNTIME_DIR'] :
-            job.env['export "' + var + '"'] = os.getenv(var)
+            job.env['export ' + var] = '"' + os.getenv(var) + '"'
 
 ##############
 #
