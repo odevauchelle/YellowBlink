@@ -202,17 +202,23 @@ WebPlayer = RotaryPlayer(
     play = lambda webradio: subprocess.Popen( [ 'mplayer', webradio['url'] ] ),
 )
 
-def launch_welle_server( channel, port ) :
-    welle_server_process = subprocess.Popen( [ 'welle-cli', '-c', channel, '-w', port ] ) # stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL )
-    # welle_server_process = subprocess.Popen( [ 'exec', 'welle-cli', '-c', channel, '-w', port ] , stdout=subprocess.PIPE, shell=True) # from Bryant Hansen, https://stackoverflow.com/questions/4789837/how-to-terminate-a-python-subprocess-launched-with-shell-true
-    current_channel = req.get("http://localhost:"  + port + "/channel") # wait until server is set up
-    return welle_server_process
+# def launch_welle_server( channel, port ) :
+#     welle_server_process = subprocess.Popen( [ 'welle-cli', '-c', channel, '-w', port ] ) # stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL )
+#     # welle_server_process = subprocess.Popen( [ 'exec', 'welle-cli', '-c', channel, '-w', port ] , stdout=subprocess.PIPE, shell=True) # from Bryant Hansen, https://stackoverflow.com/questions/4789837/how-to-terminate-a-python-subprocess-launched-with-shell-true
+#     current_channel = req.get("http://localhost:"  + port + "/channel") # wait until server is set up
+#     return welle_server_process
+#
+# DABPlayer = RotaryPlayer(
+#     name = 'DAB',
+#     streams = DABradios,
+#     launch_background_process = lambda : launch_welle_server( **DAB ),
+#     play = lambda DABradio: subprocess.Popen( [ 'mplayer', 'http://localhost:' + DAB['port'] + '/mp3/' + DABradio['sid'] ] ),
+# )
 
 DABPlayer = RotaryPlayer(
     name = 'DAB',
     streams = DABradios,
-    launch_background_process = lambda : launch_welle_server( **DAB ),
-    play = lambda DABradio: subprocess.Popen( [ 'mplayer', 'http://localhost:' + DAB['port'] + '/mp3/' + DABradio['sid'] ] ),
+    play = lambda DABradio: subprocess.Popen( [ 'welle-cli', '-T', '-c', DAB['channel'], '-p', DABradio['program'] ] ),
 )
 
 Players = MetaPlayer( [ DABPlayer, WebPlayer ] )
