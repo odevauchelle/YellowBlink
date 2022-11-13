@@ -25,6 +25,10 @@ path = os.getcwd() # current directory
 from crontab import CronTab
 cron = CronTab( user = True )
 
+# welle-cli wouldn't launch with cron
+
+for var in ['PATH', 'SHELL', 'XDG_RUNTIME_DIR'] :
+    cron.env[var] = os.getenv(var)
 
 sleeping_beast =  sys.argv[-1]
 
@@ -60,14 +64,6 @@ if not sys.argv[1] in [ '-u', '--unistall' ] :
 
         job = cron.new( comment = cron_comments[-1], command = command )
         job.every_reboot()
-
-        # welle-cli wouldn't launch with cron
-
-        for var in ['PATH', 'SHELL'] :
-            job.env[var] = os.getenv(var)
-
-        for var in ['XDG_RUNTIME_DIR'] :
-            job.env['export ' + var] = '"' + os.getenv(var) + '"'
 
 ##############
 #
