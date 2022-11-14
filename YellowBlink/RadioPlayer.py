@@ -95,6 +95,8 @@ def play_command( url, duration = None, volume = None ) :
 
     return command
 
+player_command = 'mplayer' # 'mpg321' in the future
+
 def play_radio( url, duration = None, volume = None, recovery_stream = default_recovery_stream ) :
 
     if with_amp_control :
@@ -103,7 +105,7 @@ def play_radio( url, duration = None, volume = None, recovery_stream = default_r
     if not volume is None :
         volume_control( int( volume ) )
 
-    command = 'mplayer'
+    command = player_command
 
     if not duration is None :
         command += ' -endpos ' + str( duration )
@@ -139,7 +141,7 @@ def play_radio( url, duration = None, volume = None, recovery_stream = default_r
 
 
 def kill_command() :
-    return 'killall mplayer'
+    return 'killall ' + player_command
 
 
 def get_current_volume() :

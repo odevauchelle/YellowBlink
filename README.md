@@ -15,8 +15,10 @@ run( host='0.0.0.0', port=8080, debug = False )
 Tested on Debian and Raspberry Pi OS (Bullseye).
 
 ```
-apt-get install mplayer python3-alsaaudio python3-crontab python3-pip
+apt-get install mpg321 python3-alsaaudio python3-crontab python3-pip
 ```
+
+
 ```
 pip3 install bottle RPi.GPIO
 ```
