@@ -26,9 +26,9 @@ from crontab import CronTab
 cron = CronTab( user = True )
 
 # welle-cli wouldn't launch with cron
-
-for var, value in os.environ.items() :
-    cron.env[var] = os.getenv(var)
+# 
+# for var, value in os.environ.items() :
+#     cron.env[var] = os.getenv(var)
 
 
 sleeping_beast =  sys.argv[-1]
@@ -57,6 +57,8 @@ for comment in cron_comments :
 # Install
 #
 ###############
+
+# Is this useful? https://unix.stackexchange.com/questions/721305/why-cant-play-music-at-reboot
 
 if not sys.argv[1] in [ '-u', '--unistall' ] :
 
