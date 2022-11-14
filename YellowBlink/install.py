@@ -27,8 +27,9 @@ cron = CronTab( user = True )
 
 # welle-cli wouldn't launch with cron
 
-for var in ['PATH', 'SHELL', 'XDG_RUNTIME_DIR'] :
+for var, value in os.environ.items() :
     cron.env[var] = os.getenv(var)
+
 
 sleeping_beast =  sys.argv[-1]
 
