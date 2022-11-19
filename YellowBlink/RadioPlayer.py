@@ -22,7 +22,6 @@ import subprocess
 import alsaaudio
 #importing the os module
 import os
-from time import sleep
 
 default_recovery_stream = './recovery_stream/Turdus_merula.ogg'
 
@@ -96,10 +95,8 @@ def play_command( url, duration = None, volume = None ) :
 
     return command
 
-# player_command = 'mplayer' # 'mpg321' in the future
-# duration_control_keyword = ' -endpos '
-
-player_command = 'mpg321' # the problem is duration control
+player_command = 'mplayer' # 'mpg321' in the future
+# player_command = 'mpg321' # what's hard is to implement play duration
 
 
 def play_radio( url, duration = None, volume = None, recovery_stream = default_recovery_stream ) :
@@ -112,8 +109,8 @@ def play_radio( url, duration = None, volume = None, recovery_stream = default_r
 
     command = player_command
 
-    # if not duration is None :
-    #     command += duration_control_keyword + str( duration )
+    if not duration is None :
+        command += ' -endpos ' + str( duration )
 
     command += ' '
 
@@ -123,10 +120,10 @@ def play_radio( url, duration = None, volume = None, recovery_stream = default_r
         # subprocess.run waits for execution to be complete.
         # this blocks the execution !
 
-        output = subprocess.Popen( command + url, shell = True)#, capture_output = True  )
+        output = subprocess.run( command + url, shell = True, capture_output = True  )
 
         if not 'Starting playback...' in output.stdout.decode() :
-            output = subprocess.Popen( command + recovery_stream , shell = True)#, capture_output = True )
+            output = subprocess.run( command + recovery_stream , shell = True, capture_output = True )
 
         if with_amp_control :
             ampli_control('off')
@@ -144,11 +141,6 @@ def play_radio( url, duration = None, volume = None, recovery_stream = default_r
 
         subprocess.Popen( command, shell = True )
 
-    if not duration is None :
-        print('Run for ', duration)
-        sleep( duration )
-        print('Switching off.')
-        switch_off_radio()
 
 def kill_command() :
     return 'killall ' + player_command
