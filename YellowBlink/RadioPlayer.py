@@ -95,7 +95,9 @@ def play_command( url, duration = None, volume = None ) :
 
     return command
 
-player_command = 'mplayer' # 'mpg321' in the future
+# player_command = 'mplayer' # 'mpg321' in the future
+player_command = 'mpg321'
+
 
 def play_radio( url, duration = None, volume = None, recovery_stream = default_recovery_stream ) :
 
