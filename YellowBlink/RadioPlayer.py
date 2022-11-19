@@ -123,10 +123,10 @@ def play_radio( url, duration = None, volume = None, recovery_stream = default_r
         # subprocess.run waits for execution to be complete.
         # this blocks the execution !
 
-        output = subprocess.run( command + url, shell = True, capture_output = True  )
+        output = subprocess.Popen( command + url, shell = True, capture_output = True  )
 
         if not 'Starting playback...' in output.stdout.decode() :
-            output = subprocess.run( command + recovery_stream , shell = True, capture_output = True )
+            output = subprocess.Popen( command + recovery_stream , shell = True, capture_output = True )
 
         if with_amp_control :
             ampli_control('off')
@@ -145,8 +145,10 @@ def play_radio( url, duration = None, volume = None, recovery_stream = default_r
         subprocess.Popen( command, shell = True )
 
     if not duration is None :
+        print('Run for ', duration)
         sleep( duration )
-        kill_command()
+        print('Switching off.')
+        switch_off_radio()
 
 def kill_command() :
     return 'killall ' + player_command
