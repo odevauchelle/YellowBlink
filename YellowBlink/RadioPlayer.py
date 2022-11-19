@@ -22,6 +22,7 @@ import subprocess
 import alsaaudio
 #importing the os module
 import os
+from time import sleep
 
 default_recovery_stream = './recovery_stream/Turdus_merula.ogg'
 
@@ -96,7 +97,9 @@ def play_command( url, duration = None, volume = None ) :
     return command
 
 # player_command = 'mplayer' # 'mpg321' in the future
-player_command = 'mpg321'
+# duration_control_keyword = ' -endpos '
+
+player_command = 'mpg321' # the problem is duration control
 
 
 def play_radio( url, duration = None, volume = None, recovery_stream = default_recovery_stream ) :
@@ -109,8 +112,8 @@ def play_radio( url, duration = None, volume = None, recovery_stream = default_r
 
     command = player_command
 
-    if not duration is None :
-        command += ' -endpos ' + str( duration )
+    # if not duration is None :
+    #     command += duration_control_keyword + str( duration )
 
     command += ' '
 
@@ -141,6 +144,9 @@ def play_radio( url, duration = None, volume = None, recovery_stream = default_r
 
         subprocess.Popen( command, shell = True )
 
+    if not duration is None :
+        sleep( duration )
+        kill_command()
 
 def kill_command() :
     return 'killall ' + player_command
