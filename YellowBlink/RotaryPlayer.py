@@ -196,10 +196,12 @@ class MetaPlayer :
 #
 ##########################
 
+player_command = 'mpg321'
+
 WebPlayer = RotaryPlayer(
     name = 'Web',
     streams = webradios,
-    play = lambda webradio: subprocess.Popen( [ 'mplayer', webradio['url'] ] ),
+    play = lambda webradio: subprocess.Popen( [ player_command, webradio['url'] ] ),
 )
 
 def launch_welle_server( channel, port ) :
@@ -212,7 +214,7 @@ DABPlayer = RotaryPlayer(
     name = 'DAB',
     streams = DABradios,
     launch_background_process = lambda : launch_welle_server( **DAB ),
-    play = lambda DABradio: subprocess.Popen( [ 'mpg321', 'http://localhost:' + DAB['port'] + '/mp3/' + DABradio['sid'] ] ),
+    play = lambda DABradio: subprocess.Popen( [ player_command, 'http://localhost:' + DAB['port'] + '/mp3/' + DABradio['sid'] ] ),
     # play = lambda DABradio: subprocess.Popen( [ 'mplayer', 'http://localhost:' + DAB['port'] + '/mp3/' + DABradio['sid'] ] ),
 )
 #
