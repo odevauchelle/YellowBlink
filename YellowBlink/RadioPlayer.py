@@ -10,7 +10,9 @@ from os import getcwd as os_getcwd
 #
 ########################
 
-player = 'mpg321'
+# player = 'mpg321'
+player = 'mpg123'
+
 recovery_stream = './recovery_stream/Turdus_merula.mp3'
 
 path = os_getcwd() # current directory

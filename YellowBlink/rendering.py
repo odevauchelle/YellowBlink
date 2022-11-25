@@ -133,9 +133,9 @@ def alarm_to_html( alarm, alarm_index ) :
 
     html += '<br>'
 
-    html += str( alarm['hour'] ) + ':' + "{:02d}".format( alarm['minute'] ) + ' '
+    html += str( alarm['hour'] ) + ':' + "{:02d}".format( alarm['minute'] )
     html += separator
-    html += webradios[alarm['webradio_name']]['full_name'] + ' '
+    html += webradios[alarm['webradio_name']]['full_name']
     html += separator
     html += str( alarm['duration']//60 ) + ' min'
     html += separator
