@@ -1,50 +1,42 @@
-
-#!/bin/python3
-# -*- coding: utf-8 -*-
-
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
-# Olivier Devauchelle, 2021
-
-import sys
-import subprocess
+from subprocess import check_call, Popen
+from time import sleep
 import alsaaudio
-#importing the os module
-import os
-
-default_recovery_stream = './recovery_stream/Turdus_merula.ogg'
+from sys import argv as sys_argv
+from os import getcwd as os_getcwd
 
 ########################
 #
-# Amp control
+# Parameters
 #
-#########################
+########################
+
+player = 'mpg321'
+recovery_stream = './recovery_stream/Turdus_merula.mp3'
+
+path = os_getcwd() # current directory
+print('Current directory:', path)
+
+########################
+#
+# Control ampli
+#
+########################
 
 try :
     from ampli import ampli_control
-    with_amp_control = True
     ampli_control('off')
 
 except :
-    with_amp_control = False
+
+    def ampli_control( on_off ) :
+        print('Cannot switch', on_off, 'ampli.' )
 
 
-#########################
+########################
 #
-# Mixer Settings
+# Mixer and volume
 #
-#########################
+########################
 
 def get_mixer( control = 'Speaker', cardindex = 0 ) :
     return alsaaudio.Mixer( control = control, cardindex = cardindex )
@@ -67,15 +59,76 @@ try :
 except :
     print('No soundcard found!')
 
-path = os.getcwd() # current directory
-print('Current directory:', path)
 
+def get_current_volume() :
+    return int( mixer.getvolume()[0] )
+
+
+def volume_control( value, percent_step = 10 ) :
+
+    if value == '+' :
+        value = min( [ get_current_volume() + percent_step, 100 ] )
+
+    elif value == '-' :
+        value = max( [ get_current_volume() - percent_step, 0 ] )
+
+    mixer.setvolume( value )
+
+    return get_current_volume()
 
 #########################
 #
-# Commands
+# player
 #
-#########################
+########################
+
+def play_radio( url, duration = None, volume = None, timeout = 3 ) :
+
+    switch_off_radio()
+
+    if not volume is None :
+        try :
+            volume_control( int( volume ) )
+        except :
+            print('Cannot set volume.')
+
+    ampli_control('on')
+
+    player_process = Popen( [ player, url ] )
+
+    if not timeout is None :
+
+        timeout = int(timeout)
+
+        sleep( timeout )
+
+        if not player_process.poll() is None : # player is probably not working
+            print('Failed to play stream from', url)
+            player_process = Popen( [ player, recovery_stream ] )
+            delay = 0
+
+        else :
+            delay = timeout # player is working, but we've waited already
+
+    if not duration is None :
+        sleep( int( duration ) - delay  )
+        print('Duration exceeded, stopping radio.')
+        switch_off_radio()
+
+########################
+#
+# other functions
+#
+########################
+
+def switch_off_radio() :
+
+    try :
+        check_call( [ 'killall', player ] )
+    except :
+        print("Can't switch off anything.")
+
+    ampli_control('off')
 
 def play_command( url, duration = None, volume = None ) :
 
@@ -95,86 +148,17 @@ def play_command( url, duration = None, volume = None ) :
 
     return command
 
-player_command = 'mplayer' # 'mpg321' in the future
-# player_command = 'mpg321' # what's hard is to implement play duration
-
-
-def play_radio( url, duration = None, volume = None, recovery_stream = default_recovery_stream ) :
-
-    if with_amp_control :
-        ampli_control('on')
-
-    if not volume is None :
-        volume_control( int( volume ) )
-
-    command = player_command
-
-    if not duration is None :
-        command += ' -endpos ' + str( duration )
-
-    command += ' '
-
-    if not recovery_stream is None :
-
-        # mplayer doesn't raise an error signal when it fails to stream.
-        # subprocess.run waits for execution to be complete.
-        # this blocks the execution !
-
-        output = subprocess.run( command + url, shell = True, capture_output = True  )
-
-        if not 'Starting playback...' in output.stdout.decode() :
-            output = subprocess.run( command + recovery_stream , shell = True, capture_output = True )
-
-        if with_amp_control :
-            ampli_control('off')
-
-    else :
-
-        # no recovery file.
-        # launch the streaming in the background, but cannot control proper execution
-        # Does not block execution
-
-        command += url
-
-        if with_amp_control :
-            command += ' ; python3 ampli.py off'
-
-        subprocess.Popen( command, shell = True )
-
-
-def kill_command() :
-    return 'killall ' + player_command
-
-
-def get_current_volume() :
-    return int( mixer.getvolume()[0] )
-
-
-def volume_control( value, percent_step = 10 ) :
-
-    if value == '+' :
-        value = min( [ get_current_volume() + percent_step, 100 ] )
-
-    elif value == '-' :
-        value = max( [ get_current_volume() - percent_step, 0 ] )
-
-    mixer.setvolume( value )
-
-    return get_current_volume()
-
-
-def switch_off_radio() :
-
-    subprocess.Popen( kill_command().split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE ).communicate()
-
-    if with_amp_control :
-        ampli_control('off')
+########################
+#
+# command line use
+#
+########################
 
 if __name__ == '__main__' :
 
     # For command line use
 
-    arguments = sys.argv[1:]
+    arguments = sys_argv[1:]
 
     if arguments[0] == 'play' :
         play_radio( *arguments[1:] )

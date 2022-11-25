@@ -1,6 +1,8 @@
 from subprocess import check_call, Popen
 from time import sleep
 import alsaaudio
+from sys import argv as sys_argv
+from os import getcwd as os_getcwd
 
 ########################
 #
@@ -10,6 +12,9 @@ import alsaaudio
 
 player = 'mpg321'
 recovery_stream = './recovery_stream/Turdus_merula.mp3'
+
+path = os_getcwd() # current directory
+print('Current directory:', path)
 
 ########################
 #
@@ -55,42 +60,6 @@ except :
     print('No soundcard found!')
 
 
-#########################
-#
-# player
-#
-########################
-
-def play( url, duration = None, volume = None, timeout = 3 ) :
-
-    if not volume is None :
-        try :
-            volume_control( int( volume ) )
-        except :
-            print('Cannot set volume.')
-
-    ampli_control('on')
-
-    player_process = Popen( [ player, url ] )
-
-    sleep( timeout )
-
-    if not player_process.poll() is None : # player is probably not working
-        player_process = Popen( [ player, recovery_stream ] )
-
-    else :
-        duration -= timeout # player is working, but we've waited already
-
-    if not duration is None :
-        sleep( duration )
-        switch_off_radio()
-
-########################
-#
-# other functions
-#
-########################
-
 def get_current_volume() :
     return int( mixer.getvolume()[0] )
 
@@ -107,6 +76,45 @@ def volume_control( value, percent_step = 10 ) :
 
     return get_current_volume()
 
+#########################
+#
+# player
+#
+########################
+
+def play_radio( url, duration = None, volume = None, timeout = 3 ) :
+
+    timeout = int(timeout)
+
+    if not volume is None :
+        try :
+            volume_control( int( volume ) )
+        except :
+            print('Cannot set volume.')
+
+    ampli_control('on')
+
+    player_process = Popen( [ player, url ] )
+
+    sleep( timeout )
+
+    if not player_process.poll() is None : # player is probably not working
+        player_process = Popen( [ player, recovery_stream ] )
+        delay = 0
+
+    else :
+        delay = timeout # player is working, but we've waited already
+
+    if not duration is None :
+        sleep( int( duration ) - delay  )
+        print('Duration exceeded, stopping radio.')
+        switch_off_radio()
+
+########################
+#
+# other functions
+#
+########################
 
 def switch_off_radio() :
 
@@ -123,6 +131,9 @@ def switch_off_radio() :
 
 if __name__ == '__main__' :
 
-    url = 'http://icecast.radiofrance.fr/fip-lofi.mp3'
+    # For command line use
 
-    play_process = play( 'toto', duration = 3 )
+    arguments = sys_argv[1:]
+
+    if arguments[0] == 'play' :
+        play_radio( *arguments[1:] )

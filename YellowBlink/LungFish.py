@@ -62,8 +62,7 @@ def switch_off():
 
 @route('/play/<radio_name>')
 def play( radio_name ) :
-    switch_off_radio()
-    play_radio( webradios[radio_name]['url'], recovery_stream = None )
+    play_radio( url = webradios[radio_name]['url'], timeout = None )
     return redirect("/home")
 
 @route('/volume/<value>')
