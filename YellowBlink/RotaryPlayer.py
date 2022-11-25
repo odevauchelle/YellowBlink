@@ -196,7 +196,7 @@ class MetaPlayer :
 #
 ##########################
 
-player_command = 'mpg321'
+player_command = 'mpg123'
 
 WebPlayer = RotaryPlayer(
     name = 'Web',
