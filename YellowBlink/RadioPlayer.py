@@ -3,6 +3,7 @@ from time import sleep
 import alsaaudio
 from sys import argv as sys_argv
 from os import getcwd as os_getcwd
+from glob import glob
 
 ########################
 #
@@ -13,7 +14,7 @@ from os import getcwd as os_getcwd
 # player = 'mpg321'
 player = 'mpg123'
 
-recovery_stream = './recovery_stream/Turdus_merula.mp3'
+recovery_stream_path = '/recovery_stream/'
 
 path = os_getcwd() # current directory
 print('Current directory:', path)
@@ -106,7 +107,9 @@ def play_radio( url, duration = None, volume = None, timeout = 3 ) :
 
         if not player_process.poll() is None : # player is probably not working
             print('Failed to play stream from', url)
-            player_process = Popen( [ player, recovery_stream ] )
+            print( path + recovery_stream_path + '*.mp3' )
+            recovery_stream = glob( path + recovery_stream_path + '*.mp3' )[0]
+            player_process = Popen( [ player, '--loop', '-1', recovery_stream ] )
             delay = 0
 
         else :

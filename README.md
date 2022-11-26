@@ -47,6 +47,10 @@ Before using the alarm, remember to set your time zone with `sudo raspi-config`.
 
 Go to the radio's webpage, start streaming it, and then find the streaming url in the network logging tab of your web browser, as explained [here](https://stackoverflow.com/questions/28314897/how-to-get-direct-streaming-url-from-this-flash-online-streaming-radio-station).
 
+## Recovery file
+
+A recovery audio file with a name ending in `.mp3` should be put in the `recovery_file` directory.
+
 ## GPIO pins
 
 For the alarm clock:
