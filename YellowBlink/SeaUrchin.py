@@ -63,9 +63,9 @@ else :
 ######################
 
 led = LED(17)
-switch_button = Button(23, hold_time = 2 )
-play_button = Button(11 )
-knob = RotaryEncoder( 10, 9 )
+# switch_button = Button( 23, hold_time = 2 )
+button = Button( 11 )
+knob = RotaryEncoder( 10, 9, bounce_time = .1 )
 
 #####################
 #
@@ -94,19 +94,31 @@ def ledify( the_function, n = 1 ) :
 
 #######################
 #
-# Shutdown control
+# Swhich player or Shutdown
 #
 ######################
 
-def switch_player_or_switch_off() :
+def switch_player_or_shutdown() :
 
-    if play_button.is_held :
-        blink(5)
-        shutdown()
+    blink()
+    sleep(.5)
+
+    if not button.is_pressed :
+        Players.play_or_stop()
 
     else :
-        blink(2)
-        Players.next_player()
+
+        blink()
+        sleep(1)
+
+        if not button.is_pressed :
+            blink(2)
+            Players.next_player()
+
+        else :
+            blink(4)
+            shutdown()
+
 
 #######################
 #
@@ -116,11 +128,10 @@ def switch_player_or_switch_off() :
 
 led.on()
 
+button.when_pressed = switch_player_or_shutdown
+
 knob.when_rotated_clockwise = ledify( Players.next )
 knob.when_rotated_counter_clockwise = ledify( Players.previous )
-play_button.when_released = ledify( Players.play_or_stop )
-
-switch_button.when_held = switch_player_or_switch_off
 
 
 pause()
