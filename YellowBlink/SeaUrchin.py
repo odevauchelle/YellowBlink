@@ -64,8 +64,8 @@ else :
 
 led = LED(17)
 # switch_button = Button( 23, hold_time = 2 )
-button = Button( 11 )
-knob = RotaryEncoder( 10, 9, bounce_time = .1 )
+button = Button( 9 )
+knob = RotaryEncoder( 10, 11, bounce_time = .1 )
 
 #####################
 #

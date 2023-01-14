@@ -66,8 +66,8 @@ For the DAB+ radio player:
 | Use | GPIO |
 |--|--|
 | Status led | 17 |
-| Rotary encoder | 10 & 9 |
-| Rotary push | 11 |
+| Rotary encoder | 10 & 11 |
+| Rotary push | 9 |
 | Mode switch | 23 |
 
 ## Status led
