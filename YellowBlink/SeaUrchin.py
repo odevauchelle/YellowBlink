@@ -65,7 +65,7 @@ else :
 led = LED(17)
 # switch_button = Button( 23, hold_time = 2 )
 button = Button( 10 )
-knob = RotaryEncoder( 9, 11, bounce_time = .1 )
+knob = RotaryEncoder( 11, 9, bounce_time = .1 )
 
 #####################
 #
@@ -98,6 +98,9 @@ def ledify( the_function, n = 1 ) :
 #
 ######################
 
+fast_blink_kwargs = dict( on_time=.1, off_time=.1 )
+slow_blink_kwargs = dict( on_time=.2, off_time=.2 )
+
 def switch_player_or_shutdown() :
 
     blink()
@@ -112,11 +115,12 @@ def switch_player_or_shutdown() :
         sleep(1)
 
         if not button.is_pressed :
-            blink(2)
+            led.blink( **fast_blink_kwargs )
             Players.next_player()
+            led.on()
 
         else :
-            blink(4)
+            led.blink( **slow_blink_kwargs )
             shutdown()
 
 

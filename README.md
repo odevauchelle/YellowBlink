@@ -63,12 +63,11 @@ For the alarm clock:
 
 For the DAB+ radio player:
 
-| Use | GPIO |
-|--|--|
-| Status led | 17 |
-| Rotary encoder | 9 & 11 |
-| Rotary push | 10 |
-| Mode switch | 23 |
+| Use | GPIO | Pinout | Rotary encoder (KY-040) |
+|--|--|--|--|
+| Status led | 17 | (11) | - |
+| Rotary encoder | 11, 9 |(23), (21)| CLK, DT |
+| Rotary push | 10 | (19) | SW |
 
 ## Status led
 
