@@ -117,6 +117,7 @@ def switch_player_or_shutdown() :
         if not button.is_pressed :
             led.blink( **fast_blink_kwargs )
             Players.next_player()
+            sleep(.5)
             led.on()
 
         else :
