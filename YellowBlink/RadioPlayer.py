@@ -11,7 +11,6 @@ from glob import glob
 #
 ########################
 
-# player = 'mpg321'
 player = 'mpg123'
 
 recovery_stream_path = '/recovery_stream/'
@@ -67,7 +66,7 @@ def get_current_volume() :
     return int( mixer.getvolume()[0] )
 
 
-def volume_control( value, percent_step = 10 ) :
+def volume_control( value, percent_step = 5 ) :
 
     if value == '+' :
         value = min( [ get_current_volume() + percent_step, 100 ] )
